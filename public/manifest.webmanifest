@@ -1,0 +1,19 @@
+{
+  "name": "D'Creativs Operations Hub",
+  "short_name": "D'Creativs Hub",
+  "id": "com.dcreativs.hub",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000422",
+  "theme_color": "#000422",
+  "orientation": "any",
+  "description": "Internal operations and executive delivery hub for D'Creativs",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
