@@ -20,7 +20,8 @@ import {
   FileSpreadsheet,
   Sparkles,
   X,
-  Filter
+  Filter,
+  ArrowUpRight
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import {
@@ -368,60 +369,154 @@ export const AcademyCoordinatorDesk: React.FC = () => {
         </div>
       </div>
 
-      {/* KPI Highlight Strip */}
+      {/* KPI Highlight Strip — Styled to match Overview cards */}
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
-          gap: 14,
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+          gap: 20,
           marginBottom: 24
         }}
       >
-        <div className="card-glow" style={{ padding: '16px 18px', borderRadius: 'var(--radius-md)', backgroundColor: '#FFFFFF', border: '1px solid var(--border-subtle)' }}>
-          <div style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-            Active Partner Schools
+        {/* Metric 1 — Partner Schools */}
+        <div className="hub-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 8,
+                backgroundColor: 'rgba(65, 0, 245, 0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--electric-violet)'
+              }}
+            >
+              <School size={20} />
+            </div>
+            <span
+              style={{
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                color: '#059669',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2
+              }}
+            >
+              <ArrowUpRight size={14} /> 1 Onboarding
+            </span>
           </div>
-          <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--electric-violet)', marginTop: 4 }}>
-            {partnerSchools.filter((s) => s.status === 'ACTIVE').length} <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 500 }}>Schools</span>
-          </div>
-          <div style={{ fontSize: '0.74rem', color: '#10B981', marginTop: 4 }}>
-            1 School Onboarding
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-heading)', fontFamily: 'var(--font-display)' }}>
+              {partnerSchools.filter((s) => s.status === 'ACTIVE').length}
+            </div>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 2 }}>
+              Active Partner Schools
+            </div>
           </div>
         </div>
 
-        <div className="card-glow" style={{ padding: '16px 18px', borderRadius: 'var(--radius-md)', backgroundColor: '#FFFFFF', border: '1px solid var(--border-subtle)' }}>
-          <div style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-            Total Active Cohorts
+        {/* Metric 2 — Active Cohorts */}
+        <div className="hub-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 8,
+                backgroundColor: 'rgba(136, 95, 255, 0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--lavender)'
+              }}
+            >
+              <GraduationCap size={20} />
+            </div>
+            <span className="badge badge-violet">
+              Hybrid & Physical
+            </span>
           </div>
-          <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-heading)', marginTop: 4 }}>
-            {academyCohorts.filter((c) => c.status === 'ACTIVE').length}
-          </div>
-          <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: 4 }}>
-            Physical, Partner & Online
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-heading)', fontFamily: 'var(--font-display)' }}>
+              {academyCohorts.filter((c) => c.status === 'ACTIVE').length}
+            </div>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 2 }}>
+              Total Active Cohorts
+            </div>
           </div>
         </div>
 
-        <div className="card-glow" style={{ padding: '16px 18px', borderRadius: 'var(--radius-md)', backgroundColor: '#FFFFFF', border: '1px solid var(--border-subtle)' }}>
-          <div style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-            Enrolled Learners
+        {/* Metric 3 — Enrolled Learners */}
+        <div className="hub-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 8,
+                backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#3B82F6'
+              }}
+            >
+              <Users size={20} />
+            </div>
+            <span
+              style={{
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                color: '#059669',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2
+              }}
+            >
+              <ArrowUpRight size={14} /> 94.2% Att.
+            </span>
           </div>
-          <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-heading)', marginTop: 4 }}>
-            {academyCohorts.reduce((acc, c) => acc + c.learnersCount, 0)}
-          </div>
-          <div style={{ fontSize: '0.74rem', color: '#10B981', marginTop: 4 }}>
-            94.2% Avg Attendance Rate
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-heading)', fontFamily: 'var(--font-display)' }}>
+              {academyCohorts.reduce((acc, c) => acc + c.learnersCount, 0)}
+            </div>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 2 }}>
+              Enrolled Learners
+            </div>
           </div>
         </div>
 
-        <div className="card-glow" style={{ padding: '16px 18px', borderRadius: 'var(--radius-md)', backgroundColor: '#FFFFFF', border: '1px solid var(--border-subtle)' }}>
-          <div style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-            Delivery Issues Queue
+        {/* Metric 4 — Issues Queue */}
+        <div className="hub-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 8,
+                backgroundColor: academyIssues.filter((i) => i.status === 'OPEN').length > 0 ? 'rgba(239, 68, 68, 0.08)' : 'rgba(16, 185, 129, 0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: academyIssues.filter((i) => i.status === 'OPEN').length > 0 ? '#EF4444' : '#10B981'
+              }}
+            >
+              <AlertTriangle size={20} />
+            </div>
+            <span className={academyIssues.filter((i) => i.status === 'OPEN').length > 0 ? 'badge badge-critical' : 'badge badge-healthy'}>
+              {academyIssues.filter((i) => i.status === 'OPEN').length > 0 ? 'ATTN NEEDED' : 'RESOLVED'}
+            </span>
           </div>
-          <div style={{ fontSize: '1.6rem', fontWeight: 800, color: academyIssues.filter((i) => i.status === 'OPEN').length > 0 ? '#DC2626' : '#10B981', marginTop: 4 }}>
-            {academyIssues.filter((i) => i.status === 'OPEN').length} <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 500 }}>Open</span>
-          </div>
-          <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: 4 }}>
-            {academyIssues.filter((i) => i.status === 'RESOLVED').length} Resolved
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-heading)', fontFamily: 'var(--font-display)' }}>
+              {academyIssues.filter((i) => i.status === 'OPEN').length}
+            </div>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 2 }}>
+              Delivery Issues ({academyIssues.filter((i) => i.status === 'RESOLVED').length} Resolved)
+            </div>
           </div>
         </div>
       </div>
@@ -509,12 +604,9 @@ export const AcademyCoordinatorDesk: React.FC = () => {
             {filteredCohorts.map((cohort) => (
               <div
                 key={cohort.id}
-                className="card-glow"
+                className="hub-card"
                 style={{
                   padding: 20,
-                  borderRadius: 'var(--radius-md)',
-                  backgroundColor: '#FFFFFF',
-                  border: '1px solid var(--border-subtle)',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: 12
@@ -604,12 +696,9 @@ export const AcademyCoordinatorDesk: React.FC = () => {
           {partnerSchools.map((school) => (
             <div
               key={school.id}
-              className="card-glow"
+              className="hub-card"
               style={{
                 padding: 22,
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid var(--border-subtle)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 12
@@ -669,12 +758,9 @@ export const AcademyCoordinatorDesk: React.FC = () => {
           {timetables.map((session) => (
             <div
               key={session.id}
-              className="card-glow"
+              className="hub-card"
               style={{
                 padding: '16px 20px',
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid var(--border-subtle)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -753,12 +839,9 @@ export const AcademyCoordinatorDesk: React.FC = () => {
           {academyProgrammes.map((prg) => (
             <div
               key={prg.id}
-              className="card-glow"
+              className="hub-card"
               style={{
                 padding: 22,
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid var(--border-subtle)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 12
@@ -1053,12 +1136,9 @@ export const AcademyCoordinatorDesk: React.FC = () => {
           {academyIssues.map((issue) => (
             <div
               key={issue.id}
-              className="card-glow"
+              className="hub-card"
               style={{
                 padding: '18px 20px',
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid var(--border-subtle)',
                 display: 'flex',
                 alignItems: 'flex-start',
                 justifyContent: 'space-between',
@@ -1129,12 +1209,9 @@ export const AcademyCoordinatorDesk: React.FC = () => {
           {academyCompletionReports.map((rep) => (
             <div
               key={rep.id}
-              className="card-glow"
+              className="hub-card"
               style={{
                 padding: 22,
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid var(--border-subtle)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 12

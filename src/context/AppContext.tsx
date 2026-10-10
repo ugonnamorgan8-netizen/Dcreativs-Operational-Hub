@@ -298,7 +298,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
     return INITIAL_PROFILES[0];
   });
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return !!localStorage.getItem('dcreativs_current_user_id');
+  });
 
   // Active workspace is statically locked to the role's primary workspace
   const [activeWorkspace] = useState<WorkspaceLabel>(() => {

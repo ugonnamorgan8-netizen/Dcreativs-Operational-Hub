@@ -80,24 +80,80 @@ export const CooOperationsDesk: React.FC = () => {
     }
   ];
 
+  const [syncedNotice, setSyncedNotice] = useState<string | null>(null);
+
   const workflows = [
     {
-      name: 'Client Onboarding v2',
+      id: 'WF-101',
+      name: 'Client Onboarding & Provisioning v2',
+      studio: 'Client Services & Growth',
       owner: 'Marcus Thorne',
-      stage: 'AUTOMATION',
-      health: '#10B981'
+      stage: 'AUTOMATION PIPELINE',
+      integration: 'n8n Webhook · Slack Alert',
+      sla: 'SLA: 4h (Met)',
+      status: 'HEALTHY',
+      health: '#10B981',
+      lastRun: '8 mins ago'
     },
     {
-      name: 'Creative Handoff',
+      id: 'WF-102',
+      name: 'Creative Deliverable Review & Handoff',
+      studio: 'Design Studio',
       owner: 'Sarah Chen',
-      stage: 'REVIEW',
-      health: '#10B981'
+      stage: 'CPO REVIEW QUEUE',
+      integration: 'Figma API · S3 Asset Vault',
+      sla: 'SLA: 24h (Met)',
+      status: 'HEALTHY',
+      health: '#10B981',
+      lastRun: '22 mins ago'
     },
     {
-      name: 'Internal Review Cycle',
+      id: 'WF-103',
+      name: 'Internal Stakeholder Review Cycle',
+      studio: 'Cross-Departmental',
       owner: 'Marcus Thorne',
-      stage: 'STAKEHOLDER',
-      health: '#F59E0B'
+      stage: 'EXECUTIVE SIGN-OFF',
+      integration: 'WhatsApp Ombudsman Trigger',
+      sla: 'SLA: 48h (Delayed 2h)',
+      status: 'WARNING',
+      health: '#F59E0B',
+      lastRun: '1 hour ago'
+    },
+    {
+      id: 'WF-104',
+      name: 'Academy Roster Admission Batch Ingest',
+      studio: 'Academy Operations',
+      owner: 'Tunde Bakare',
+      stage: 'ROSTER EXTRACTION',
+      integration: 'Excel Parser · Central DB',
+      sla: 'SLA: Instant',
+      status: 'HEALTHY',
+      health: '#10B981',
+      lastRun: '2 hours ago'
+    },
+    {
+      id: 'WF-105',
+      name: 'Finance Invoice Dispatch & Stripe Sync',
+      studio: 'Financial Operations',
+      owner: 'Xant (CFO)',
+      stage: 'LEDGER RECONCILIATION',
+      integration: 'Stripe Webhook · Accounting',
+      sla: 'SLA: 12h (Met)',
+      status: 'HEALTHY',
+      health: '#10B981',
+      lastRun: '3 hours ago'
+    },
+    {
+      id: 'WF-106',
+      name: 'Sprint Retrospective & Velocity Log',
+      studio: 'Tech & Automation',
+      owner: 'Leo Marcus',
+      stage: 'VELOCITY COMPILATION',
+      integration: 'GitHub Actions · Audit Log',
+      sla: 'SLA: Weekly Cadence',
+      status: 'HEALTHY',
+      health: '#10B981',
+      lastRun: 'Yesterday'
     }
   ];
 
@@ -330,97 +386,195 @@ export const CooOperationsDesk: React.FC = () => {
             </div>
           </div>
 
-      {/* 2. Operational Subgrid: Active Workflows + Operational Alerts */}
-      <div className="hub-subgrid-pair">
-        {/* Left Column: Active Workflow Status Table */}
-        <div className="hub-card" style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <h3 style={{ fontSize: '1.05rem', color: 'var(--text-heading)', fontWeight: 700 }}>
-              Active Workflow Status
-            </h3>
-            <button
-              onClick={() => alert('Workflows updated with real-time operational status.')}
-              style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--electric-violet)' }}
-            >
-              Sync Workflows
-            </button>
+      {/* 2. Expanded Active Workflow Status Card (Full Width & Horizontally Scrollable) */}
+      <div className="hub-card hub-hero-card" style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-heading)', fontWeight: 800 }}>
+                Active Workflow Status & Automation Pipelines
+              </h3>
+              <span className="badge badge-healthy">
+                {workflows.length} LIVE PIPELINES
+              </span>
+            </div>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 4 }}>
+              End-to-end studio orchestration, SLAs, triggers & stage progression · Scroll horizontally to view complete parameters
+            </p>
           </div>
 
-          <div style={{ overflowX: 'auto', flex: 1 }}>
-            <table className="hub-table">
-              <thead>
-                <tr>
-                  <th>Workflow Name</th>
-                  <th>Owner</th>
-                  <th>Current Stage</th>
-                  <th>Health</th>
-                </tr>
-              </thead>
-              <tbody>
-                {workflows.map((wf, idx) => (
-                  <tr key={idx}>
-                    <td style={{ fontWeight: 600 }}>{wf.name}</td>
-                    <td style={{ color: 'var(--text-muted)' }}>{wf.owner}</td>
-                    <td>
-                      <span className="badge badge-neutral" style={{ fontSize: '0.68rem' }}>
-                        {wf.stage}
-                      </span>
-                    </td>
-                    <td>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button
+              onClick={() => {
+                setSyncedNotice('All operational workflows reconciled with live studio queues.');
+                setTimeout(() => setSyncedNotice(null), 3000);
+              }}
+              className="btn-secondary"
+              style={{ fontSize: '0.8rem', height: 36, padding: '0 12px', display: 'flex', alignItems: 'center', gap: 6 }}
+            >
+              <Activity size={14} color="var(--electric-violet)" />
+              <span>Sync Workflows</span>
+            </button>
+          </div>
+        </div>
+
+        {syncedNotice && (
+          <div
+            style={{
+              marginBottom: 14,
+              padding: '10px 14px',
+              backgroundColor: '#ECFDF5',
+              border: '1px solid #A7F3D0',
+              borderRadius: 6,
+              color: '#065F46',
+              fontSize: '0.8rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8
+            }}
+          >
+            <CheckCircle2 size={16} />
+            <span>{syncedNotice}</span>
+          </div>
+        )}
+
+        {/* Horizontally Scrollable Container with defined min-width for neatness */}
+        <div
+          className="hub-table-container"
+          style={{
+            overflowX: 'auto',
+            width: '100%',
+            WebkitOverflowScrolling: 'touch',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 'var(--radius-sm)'
+          }}
+        >
+          <table className="hub-table" style={{ width: '100%', minWidth: 920, borderCollapse: 'separate' }}>
+            <thead>
+              <tr>
+                <th style={{ whiteSpace: 'nowrap' }}>Pipeline / Workflow</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Department / Studio</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Process Lead</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Current Stage</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Integration / Trigger</th>
+                <th style={{ whiteSpace: 'nowrap' }}>SLA Performance</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Last Activity</th>
+                <th style={{ whiteSpace: 'nowrap' }}>System Health</th>
+              </tr>
+            </thead>
+            <tbody>
+              {workflows.map((wf) => (
+                <tr key={wf.id}>
+                  <td style={{ whiteSpace: 'nowrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span
                         style={{
-                          display: 'inline-block',
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          color: 'var(--electric-violet)',
+                          backgroundColor: 'var(--electric-violet-light)',
+                          padding: '2px 6px',
+                          borderRadius: 4
+                        }}
+                      >
+                        {wf.id}
+                      </span>
+                      <strong style={{ color: 'var(--text-heading)' }}>{wf.name}</strong>
+                    </div>
+                  </td>
+                  <td style={{ whiteSpace: 'nowrap', color: 'var(--text-muted)' }}>
+                    {wf.studio}
+                  </td>
+                  <td style={{ whiteSpace: 'nowrap' }}>
+                    <div style={{ fontWeight: 600, color: 'var(--text-heading)' }}>{wf.owner}</div>
+                  </td>
+                  <td style={{ whiteSpace: 'nowrap' }}>
+                    <span className="badge badge-neutral" style={{ fontSize: '0.7rem' }}>
+                      {wf.stage}
+                    </span>
+                  </td>
+                  <td style={{ whiteSpace: 'nowrap', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    {wf.integration}
+                  </td>
+                  <td style={{ whiteSpace: 'nowrap' }}>
+                    <span
+                      style={{
+                        fontSize: '0.76rem',
+                        fontWeight: 600,
+                        color: wf.status === 'WARNING' ? '#D97706' : '#059669'
+                      }}
+                    >
+                      {wf.sla}
+                    </span>
+                  </td>
+                  <td style={{ whiteSpace: 'nowrap', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    {wf.lastRun}
+                  </td>
+                  <td style={{ whiteSpace: 'nowrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span
+                        style={{
                           width: 8,
                           height: 8,
                           borderRadius: '50%',
                           backgroundColor: wf.health
                         }}
                       />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      <span
+                        className={wf.status === 'WARNING' ? 'badge badge-warning' : 'badge badge-healthy'}
+                        style={{ fontSize: '0.68rem' }}
+                      >
+                        {wf.status}
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* 3. Operational Subgrid: Operational Alerts + Milestones & Notes */}
+      <div className="hub-subgrid-pair">
+        {/* Left Column: Operational Alerts */}
+        <div className="hub-card" style={{ background: 'linear-gradient(135deg, #090E28 0%, #15193B 100%)', color: '#FFFFFF', display: 'flex', flexDirection: 'column' }}>
+          <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#FFFFFF', marginBottom: 16 }}>
+            Operational Alerts
+          </h4>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {operationalAlerts.map((alt) => (
+              <div
+                key={alt.id}
+                style={{
+                  padding: 12,
+                  backgroundColor: alt.type === 'CRITICAL' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)',
+                  borderLeft: `3px solid ${alt.type === 'CRITICAL' ? '#EF4444' : '#F59E0B'}`,
+                  borderRadius: 4
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: alt.type === 'CRITICAL' ? '#FCA5A5' : '#FCD34D' }}>
+                    {alt.title}
+                  </div>
+                  <button
+                    onClick={() => acknowledgeAlert(alt.id)}
+                    style={{ fontSize: '0.7rem', color: '#E2E8F0', textDecoration: 'underline' }}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+                <div style={{ fontSize: '0.74rem', color: '#E2E8F0', marginTop: 2 }}>
+                  {alt.description}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Right Column: Operational Alerts, Milestones, Studio Note */}
+        {/* Right Column: Upcoming Milestones + Studio Note */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {/* Operational Alerts */}
-          <div className="hub-card" style={{ background: 'linear-gradient(135deg, #090E28 0%, #15193B 100%)', color: '#FFFFFF' }}>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#FFFFFF', marginBottom: 16 }}>
-              Operational Alerts
-            </h4>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              {operationalAlerts.map((alt) => (
-                <div
-                  key={alt.id}
-                  style={{
-                    padding: 12,
-                    backgroundColor: alt.type === 'CRITICAL' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)',
-                    borderLeft: `3px solid ${alt.type === 'CRITICAL' ? '#EF4444' : '#F59E0B'}`,
-                    borderRadius: 4
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ fontSize: '0.82rem', fontWeight: 700, color: alt.type === 'CRITICAL' ? '#FCA5A5' : '#FCD34D' }}>
-                      {alt.title}
-                    </div>
-                    <button
-                      onClick={() => acknowledgeAlert(alt.id)}
-                      style={{ fontSize: '0.7rem', color: '#E2E8F0', textDecoration: 'underline' }}
-                    >
-                      Dismiss
-                    </button>
-                  </div>
-                  <div style={{ fontSize: '0.74rem', color: '#E2E8F0', marginTop: 2 }}>
-                    {alt.description}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
 
           {/* Upcoming Milestones */}
           <div className="hub-card">

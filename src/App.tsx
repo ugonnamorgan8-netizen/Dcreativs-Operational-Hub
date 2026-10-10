@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { Sidebar } from './components/Sidebar';
 import { Topbar } from './components/Topbar';
@@ -12,7 +12,6 @@ import { CandidateDetailModal } from './components/CandidateDetailModal';
 import { NewCampaignModal } from './components/NewCampaignModal';
 import { NewUpdateModal } from './components/NewUpdateModal';
 import { ApprovalHistoryModal } from './components/ApprovalHistoryModal';
-import { Menu } from 'lucide-react';
 
 // Views
 import { LoginView } from './views/LoginView';
@@ -97,12 +96,6 @@ export const AppContent: React.FC = () => {
     setIsNewUpdateModalOpen
   } = useApp();
 
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 1024);
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   if (!isAuthenticated) {
     return <LoginView />;
@@ -118,20 +111,7 @@ export const AppContent: React.FC = () => {
         </div>
       </main>
 
-      {/* Floating Bottom Menu Bar — Mobile Only */}
-      {isMobile && (
-        <div className="mobile-floating-dock">
-          <button
-            onClick={() => setIsMobileSidebarOpen(true)}
-            className="mobile-floating-menu-trigger"
-            aria-label="Open Workspace Navigation Menu"
-            id="mobile-floating-menu-btn"
-          >
-            <Menu size={18} />
-            <span>Workspaces & Menu</span>
-          </button>
-        </div>
-      )}
+
 
       {/* Global Interactive Modals & Drawers */}
       <ApprovalHistoryModal />
