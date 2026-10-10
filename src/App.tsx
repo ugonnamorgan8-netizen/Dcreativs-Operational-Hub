@@ -106,7 +106,7 @@ export const AppContent: React.FC = () => {
       <Sidebar />
       <main className="app-main">
         <Topbar />
-        <div style={{ flex: 1, minHeight: 0 }}>
+        <div style={{ flex: 1, minHeight: 0, minWidth: 0, maxWidth: '100%', width: '100%' }}>
           <MainViewRouter />
         </div>
       </main>

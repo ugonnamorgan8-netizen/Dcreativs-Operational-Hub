@@ -308,9 +308,10 @@ export const AcademyCoordinatorDesk: React.FC = () => {
   });
 
   return (
-    <div style={{ padding: '24px', maxWidth: 1400, margin: '0 auto' }}>
+    <div className="hub-view-container" style={{ maxWidth: 1400, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* Header Banner */}
       <div
+        className="academy-header-banner"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -324,34 +325,41 @@ export const AcademyCoordinatorDesk: React.FC = () => {
           border: '1px solid rgba(65, 0, 245, 0.15)'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, minWidth: 0, flex: 1 }}>
           <div
+            className="academy-header-icon"
             style={{
-              width: 44,
-              height: 44,
-              borderRadius: 12,
+              width: 34,
+              height: 34,
+              minWidth: 34,
+              minHeight: 34,
+              borderRadius: 10,
               background: 'linear-gradient(135deg, var(--midnight) 0%, var(--electric-violet) 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#FFFFFF'
+              color: '#FFFFFF',
+              flexShrink: 0,
+              marginTop: 2,
+              boxShadow: '0 2px 8px rgba(65, 0, 245, 0.25)'
             }}
           >
-            <GraduationCap size={24} />
+            <GraduationCap size={18} />
           </div>
-          <div>
+          <div style={{ minWidth: 0, flex: 1 }}>
             <h1
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: '1.35rem',
+                fontSize: '1.25rem',
                 fontWeight: 800,
                 color: 'var(--text-heading)',
-                margin: 0
+                margin: 0,
+                lineHeight: 1.25
               }}
             >
               Academy Operations & Delivery Desk
             </h1>
-            <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+            <p style={{ margin: '6px 0 0', fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.45 }}>
               Physical coding classes, partner schools, hybrid programmes, tutor schedules & learner tracking
             </p>
           </div>

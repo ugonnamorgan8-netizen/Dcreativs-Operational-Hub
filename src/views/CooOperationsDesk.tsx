@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -12,6 +12,8 @@ import {
   Users,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ArrowLeftRight,
   CheckCircle2,
   X,
   Target,
@@ -30,6 +32,36 @@ export const CooOperationsDesk: React.FC = () => {
 
   const [expandedStudio, setExpandedStudio] = useState<string | null>(null);
   const [isMilestonesModalOpen, setIsMilestonesModalOpen] = useState(false);
+
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const [isTableDragging, setIsTableDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragScrollLeft, setDragScrollLeft] = useState(0);
+
+  const handleTableMouseDown = (e: React.MouseEvent) => {
+    if (!tableContainerRef.current) return;
+    setIsTableDragging(true);
+    setDragStartX(e.pageX - tableContainerRef.current.offsetLeft);
+    setDragScrollLeft(tableContainerRef.current.scrollLeft);
+  };
+
+  const handleTableMouseUpOrLeave = () => {
+    setIsTableDragging(false);
+  };
+
+  const handleTableMouseMove = (e: React.MouseEvent) => {
+    if (!isTableDragging || !tableContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - tableContainerRef.current.offsetLeft;
+    const walk = (x - dragStartX) * 1.5;
+    tableContainerRef.current.scrollLeft = dragScrollLeft - walk;
+  };
+
+  const handleTableScroll = (direction: 'left' | 'right') => {
+    if (!tableContainerRef.current) return;
+    const offset = direction === 'left' ? -280 : 280;
+    tableContainerRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+  };
 
   const workloadData = [
     {
@@ -158,7 +190,7 @@ export const CooOperationsDesk: React.FC = () => {
   ];
 
   return (
-    <div style={{ padding: '28px 32px', display: 'flex', flexDirection: 'column', gap: 24 }}>
+    <div className="hub-view-container" style={{ minWidth: 0, maxWidth: '100%', width: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -387,30 +419,31 @@ export const CooOperationsDesk: React.FC = () => {
           </div>
 
       {/* 2. Expanded Active Workflow Status Card (Full Width & Horizontally Scrollable) */}
-      <div className="hub-card hub-hero-card" style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-heading)', fontWeight: 800 }}>
-                Active Workflow Status & Automation Pipelines
+      <div className="hub-card hub-hero-card" style={{ width: '100%', maxWidth: '100%', minWidth: 0, display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
+        <div className="workflow-card-header">
+          <div className="workflow-card-header-left">
+            <div className="workflow-title-row">
+              <h3 className="workflow-title-heading">
+                <span className="workflow-title-line-1">Active Workflow Status</span>
+                <span className="workflow-title-line-2">& Automation Pipelines</span>
               </h3>
-              <span className="badge badge-healthy">
-                {workflows.length} LIVE PIPELINES
+              <span className="badge badge-healthy workflow-live-badge">
+                <span className="workflow-badge-text-line">{workflows.length} LIVE</span>
+                <span className="workflow-badge-text-line">PIPELINES</span>
               </span>
             </div>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 4 }}>
+            <p className="workflow-card-desc">
               End-to-end studio orchestration, SLAs, triggers & stage progression · Scroll horizontally to view complete parameters
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="workflow-card-header-actions">
             <button
               onClick={() => {
                 setSyncedNotice('All operational workflows reconciled with live studio queues.');
                 setTimeout(() => setSyncedNotice(null), 3000);
               }}
-              className="btn-secondary"
-              style={{ fontSize: '0.8rem', height: 36, padding: '0 12px', display: 'flex', alignItems: 'center', gap: 6 }}
+              className="btn-secondary workflow-sync-btn"
             >
               <Activity size={14} color="var(--electric-violet)" />
               <span>Sync Workflows</span>
@@ -438,15 +471,79 @@ export const CooOperationsDesk: React.FC = () => {
           </div>
         )}
 
+        {/* Horizontal Navigation Control Toolbar */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 10,
+            flexWrap: 'wrap',
+            gap: 8
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+            <ArrowLeftRight size={14} color="var(--electric-violet)" />
+            <span>Swipe, drag or click to view all 8 columns</span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <button
+              type="button"
+              onClick={() => handleTableScroll('left')}
+              className="btn-secondary"
+              style={{
+                height: 28,
+                padding: '0 8px',
+                fontSize: '0.72rem',
+                minHeight: 'unset',
+                gap: 4
+              }}
+              title="Scroll table left"
+            >
+              <ChevronLeft size={13} />
+              <span>Left</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTableScroll('right')}
+              className="btn-secondary"
+              style={{
+                height: 28,
+                padding: '0 8px',
+                fontSize: '0.72rem',
+                minHeight: 'unset',
+                gap: 4,
+                backgroundColor: 'var(--electric-violet-light)',
+                borderColor: 'rgba(65, 0, 245, 0.2)',
+                color: 'var(--electric-violet)'
+              }}
+              title="Scroll table right"
+            >
+              <span>Right</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
+        </div>
+
         {/* Horizontally Scrollable Container with defined min-width for neatness */}
         <div
+          ref={tableContainerRef}
           className="hub-table-container"
+          onMouseDown={handleTableMouseDown}
+          onMouseLeave={handleTableMouseUpOrLeave}
+          onMouseUp={handleTableMouseUpOrLeave}
+          onMouseMove={handleTableMouseMove}
           style={{
             overflowX: 'auto',
             width: '100%',
+            maxWidth: '100%',
+            minWidth: 0,
             WebkitOverflowScrolling: 'touch',
             border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--radius-sm)'
+            borderRadius: 'var(--radius-sm)',
+            cursor: isTableDragging ? 'grabbing' : 'grab',
+            userSelect: isTableDragging ? 'none' : 'auto'
           }}
         >
           <table className="hub-table" style={{ width: '100%', minWidth: 920, borderCollapse: 'separate' }}>
