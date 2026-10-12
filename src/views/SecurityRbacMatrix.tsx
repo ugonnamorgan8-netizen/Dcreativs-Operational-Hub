@@ -47,53 +47,71 @@ export const SecurityRbacMatrix: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '28px 32px', display: 'flex', flexDirection: 'column', gap: 24 }}>
+    <div className="hub-view-container">
       {/* Header */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <h1 style={{ fontSize: '1.8rem', color: 'var(--text-heading)', fontWeight: 700 }}>
-            Security, RBAC & Append-Only Audit Matrix
-          </h1>
-          <span className="badge badge-healthy">ZERO-LEAK POLICY ENFORCED</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <h1 style={{ fontSize: '1.5rem', color: 'var(--text-heading)', fontWeight: 700, margin: 0 }}>
+              Security, RBAC & Append-Only Audit Matrix
+            </h1>
+            <span className="badge badge-healthy">ZERO-LEAK POLICY ENFORCED</span>
+          </div>
         </div>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: 2 }}>
+        <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 4, margin: '4px 0 0' }}>
           Formal role-action-scope access definitions, append-only security logs, and zero-leak permission testing.
         </p>
       </div>
 
       {/* Role / Action / Scope Matrix Table */}
       <div className="hub-card">
-        <h3 style={{ fontSize: '1.1rem', color: 'var(--text-heading)', fontWeight: 700, marginBottom: 14 }}>
-          Role / Action / Scope Authorization Matrix
-        </h3>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+          <h3 style={{ fontSize: '1.05rem', color: 'var(--text-heading)', fontWeight: 700, margin: 0 }}>
+            Role / Action / Scope Authorization Matrix
+          </h3>
+          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+            Scroll →
+          </span>
+        </div>
 
-        <div style={{ overflowX: 'auto' }}>
-          <table className="hub-table">
+        <div
+          className="hub-table-container"
+          style={{
+            overflowX: 'auto',
+            width: '100%',
+            maxWidth: '100%',
+            minWidth: 0,
+            WebkitOverflowScrolling: 'touch',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 'var(--radius-sm)'
+          }}
+        >
+          <table className="hub-table" style={{ width: '100%', minWidth: 660, borderCollapse: 'separate' }}>
             <thead>
               <tr>
-                <th>Action Grant</th>
-                <th>CEO</th>
-                <th>COO</th>
-                <th>CPO</th>
-                <th>CFO</th>
-                <th>CHRO</th>
-                <th>CMO</th>
-                <th>Staff</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 200 }}>Action Grant</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 60, textAlign: 'center' }}>CEO</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 60, textAlign: 'center' }}>COO</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 60, textAlign: 'center' }}>CPO</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 60, textAlign: 'center' }}>CFO</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 60, textAlign: 'center' }}>CHRO</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 60, textAlign: 'center' }}>CMO</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 60, textAlign: 'center' }}>Staff</th>
               </tr>
             </thead>
             <tbody>
               {matrix.map((row, idx) => (
                 <tr key={idx}>
-                  <td style={{ fontFamily: 'monospace', fontWeight: 600, color: 'var(--electric-violet)' }}>
+                  <td style={{ fontFamily: 'monospace', fontWeight: 600, color: 'var(--electric-violet)', whiteSpace: 'nowrap' }}>
                     {row.action}
                   </td>
-                  <td>{row.ceo ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
-                  <td>{row.coo ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
-                  <td>{row.cpo ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
-                  <td>{row.cfo ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
-                  <td>{row.chro ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
-                  <td>{row.cmo ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
-                  <td>{row.staff ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
+                  <td style={{ textAlign: 'center' }}>{row.ceo ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
+                  <td style={{ textAlign: 'center' }}>{row.coo ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
+                  <td style={{ textAlign: 'center' }}>{row.cpo ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
+                  <td style={{ textAlign: 'center' }}>{row.cfo ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
+                  <td style={{ textAlign: 'center' }}>{row.chro ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
+                  <td style={{ textAlign: 'center' }}>{row.cmo ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
+                  <td style={{ textAlign: 'center' }}>{row.staff ? <CheckCircle size={16} color="#10B981" /> : <XCircle size={16} color="#CBD5E1" />}</td>
                 </tr>
               ))}
             </tbody>

@@ -1,5 +1,5 @@
 // Service Worker for D'Creativs Operations Hub
-const CACHE_NAME = 'dcreativs-shell-v7';
+const CACHE_NAME = 'dcreativs-shell-v8';
 const SHELL_ASSETS = [
   '/',
   '/index.html',

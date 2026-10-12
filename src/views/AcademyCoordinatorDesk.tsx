@@ -1070,17 +1070,26 @@ export const AcademyCoordinatorDesk: React.FC = () => {
           <div
             id="learners-registry-table"
             className="hub-table-container section-jump-target"
-            style={{ overflowX: 'auto', backgroundColor: '#FFFFFF', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}
+            style={{
+              overflowX: 'auto',
+              width: '100%',
+              maxWidth: '100%',
+              minWidth: 0,
+              WebkitOverflowScrolling: 'touch',
+              backgroundColor: '#FFFFFF',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--border-subtle)'
+            }}
           >
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', textAlign: 'left' }}>
+            <table style={{ width: '100%', minWidth: 720, borderCollapse: 'collapse', fontSize: '0.82rem', textAlign: 'left' }}>
               <thead>
                 <tr style={{ backgroundColor: 'var(--bg-surface-secondary)', borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
-                  <th style={{ padding: '12px 16px', fontWeight: 700 }}>Learner Name</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 700 }}>Cohort</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 700 }}>Guardian Contact</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 700 }}>Attendance</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 700 }}>Progress</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 700 }}>Status</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, whiteSpace: 'nowrap', minWidth: 160 }}>Learner Name</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, whiteSpace: 'nowrap', minWidth: 130 }}>Cohort</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, whiteSpace: 'nowrap', minWidth: 160 }}>Guardian Contact</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, whiteSpace: 'nowrap', minWidth: 110 }}>Attendance</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, whiteSpace: 'nowrap', minWidth: 110 }}>Progress</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, whiteSpace: 'nowrap', minWidth: 90 }}>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -1641,21 +1650,24 @@ export const AcademyCoordinatorDesk: React.FC = () => {
                 </div>
 
                 <div
+                  className="hub-table-container"
                   style={{
-                    maxHeight: 160,
+                    maxHeight: 180,
                     overflowY: 'auto',
+                    overflowX: 'auto',
+                    WebkitOverflowScrolling: 'touch',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: 6,
                     fontSize: '0.78rem'
                   }}
                 >
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <table style={{ width: '100%', minWidth: 480, borderCollapse: 'collapse' }}>
                     <thead>
                       <tr style={{ backgroundColor: 'var(--bg-surface-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>
-                        <th style={{ padding: '6px 10px', textAlign: 'left' }}>Candidate Name</th>
-                        <th style={{ padding: '6px 10px', textAlign: 'left' }}>Student Email</th>
-                        <th style={{ padding: '6px 10px', textAlign: 'left' }}>Guardian</th>
-                        <th style={{ padding: '6px 10px', textAlign: 'left' }}>Contact</th>
+                        <th style={{ padding: '6px 10px', textAlign: 'left', whiteSpace: 'nowrap' }}>Candidate Name</th>
+                        <th style={{ padding: '6px 10px', textAlign: 'left', whiteSpace: 'nowrap' }}>Student Email</th>
+                        <th style={{ padding: '6px 10px', textAlign: 'left', whiteSpace: 'nowrap' }}>Guardian</th>
+                        <th style={{ padding: '6px 10px', textAlign: 'left', whiteSpace: 'nowrap' }}>Contact</th>
                       </tr>
                     </thead>
                     <tbody>

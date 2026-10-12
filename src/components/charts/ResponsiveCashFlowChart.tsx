@@ -203,10 +203,22 @@ export const ResponsiveCashFlowChart: React.FC<ResponsiveCashFlowChartProps> = (
 
       {showTableView ? (
         /* Accessible Data Table Alternative */
-        <div style={{ overflowX: 'auto', border: '1px solid var(--border-subtle)', borderRadius: 6 }}>
+        <div
+          className="hub-table-container"
+          style={{
+            overflowX: 'auto',
+            width: '100%',
+            maxWidth: '100%',
+            minWidth: 0,
+            WebkitOverflowScrolling: 'touch',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 6
+          }}
+        >
           <table
             style={{
               width: '100%',
+              minWidth: 440,
               borderCollapse: 'collapse',
               fontSize: '0.8rem',
               textAlign: 'left'
@@ -214,10 +226,10 @@ export const ResponsiveCashFlowChart: React.FC<ResponsiveCashFlowChartProps> = (
           >
             <thead>
               <tr style={{ backgroundColor: 'var(--bg-surface-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>
-                <th style={{ padding: '8px 12px', fontWeight: 700 }}>Month</th>
-                <th style={{ padding: '8px 12px', fontWeight: 700 }}>Revenue ({currency})</th>
-                <th style={{ padding: '8px 12px', fontWeight: 700 }}>Expenses ({currency})</th>
-                <th style={{ padding: '8px 12px', fontWeight: 700 }}>Net Cash Flow</th>
+                <th style={{ padding: '8px 12px', fontWeight: 700, whiteSpace: 'nowrap' }}>Month</th>
+                <th style={{ padding: '8px 12px', fontWeight: 700, whiteSpace: 'nowrap' }}>Revenue ({currency})</th>
+                <th style={{ padding: '8px 12px', fontWeight: 700, whiteSpace: 'nowrap' }}>Expenses ({currency})</th>
+                <th style={{ padding: '8px 12px', fontWeight: 700, whiteSpace: 'nowrap' }}>Net Cash Flow</th>
               </tr>
             </thead>
             <tbody>

@@ -158,7 +158,7 @@ export const TutorWorkspace: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: '24px', maxWidth: 1300, margin: '0 auto' }}>
+    <div className="hub-view-container" style={{ maxWidth: 1300, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
       {/* Welcome Banner */}
       <div
         style={{
@@ -379,14 +379,26 @@ export const TutorWorkspace: React.FC = () => {
             </div>
           </div>
 
-          <div style={{ overflowX: 'auto', backgroundColor: '#FFFFFF', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', textAlign: 'left' }}>
+          <div
+            className="hub-table-container"
+            style={{
+              overflowX: 'auto',
+              width: '100%',
+              maxWidth: '100%',
+              minWidth: 0,
+              WebkitOverflowScrolling: 'touch',
+              backgroundColor: '#FFFFFF',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--border-subtle)'
+            }}
+          >
+            <table style={{ width: '100%', minWidth: 620, borderCollapse: 'collapse', fontSize: '0.82rem', textAlign: 'left' }}>
               <thead>
                 <tr style={{ backgroundColor: 'var(--bg-surface-secondary)', borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
-                  <th style={{ padding: '12px 16px', fontWeight: 700 }}>Learner Name</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 700 }}>Guardian Contact</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 700 }}>Current Attendance Benchmark</th>
-                  <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'center' }}>Mark Attendance</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, whiteSpace: 'nowrap', minWidth: 160 }}>Learner Name</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, whiteSpace: 'nowrap', minWidth: 180 }}>Guardian Contact</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, whiteSpace: 'nowrap', minWidth: 130 }}>Current Benchmark</th>
+                  <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'center', whiteSpace: 'nowrap', minWidth: 150 }}>Mark Attendance</th>
                 </tr>
               </thead>
               <tbody>
@@ -394,7 +406,7 @@ export const TutorWorkspace: React.FC = () => {
                   const status = attendanceMap[lrn.id] || 'PRESENT';
                   return (
                     <tr key={lrn.id} style={{ borderBottom: '1px solid var(--border-light)' }}>
-                      <td style={{ padding: '12px 16px', fontWeight: 600, color: 'var(--text-heading)' }}>
+                      <td style={{ padding: '12px 16px', fontWeight: 600, color: 'var(--text-heading)', whiteSpace: 'nowrap' }}>
                         {lrn.fullName}
                       </td>
                       <td style={{ padding: '12px 16px', color: 'var(--text-muted)' }}>

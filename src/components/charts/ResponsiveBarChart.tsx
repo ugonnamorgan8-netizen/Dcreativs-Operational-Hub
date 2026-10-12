@@ -177,15 +177,26 @@ export const ResponsiveBarChart: React.FC<ResponsiveBarChartProps> = ({
       </div>
 
       {showTableView ? (
-        <div style={{ overflowX: 'auto', border: '1px solid var(--border-subtle)', borderRadius: 8 }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem', textAlign: 'left' }}>
+        <div
+          className="hub-table-container"
+          style={{
+            overflowX: 'auto',
+            width: '100%',
+            maxWidth: '100%',
+            minWidth: 0,
+            WebkitOverflowScrolling: 'touch',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 8
+          }}
+        >
+          <table style={{ width: '100%', minWidth: 460, borderCollapse: 'collapse', fontSize: '0.8rem', textAlign: 'left' }}>
             <thead>
               <tr style={{ backgroundColor: 'var(--bg-surface-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>
-                <th style={{ padding: '8px 12px', fontWeight: 700 }}>Month</th>
-                <th style={{ padding: '8px 12px', fontWeight: 700 }}>Actual ({currency})</th>
-                <th style={{ padding: '8px 12px', fontWeight: 700 }}>Target ({currency})</th>
-                <th style={{ padding: '8px 12px', fontWeight: 700 }}>Variance</th>
-                <th style={{ padding: '8px 12px', fontWeight: 700 }}>Status</th>
+                <th style={{ padding: '8px 12px', fontWeight: 700, whiteSpace: 'nowrap' }}>Month</th>
+                <th style={{ padding: '8px 12px', fontWeight: 700, whiteSpace: 'nowrap' }}>Actual ({currency})</th>
+                <th style={{ padding: '8px 12px', fontWeight: 700, whiteSpace: 'nowrap' }}>Target ({currency})</th>
+                <th style={{ padding: '8px 12px', fontWeight: 700, whiteSpace: 'nowrap' }}>Variance</th>
+                <th style={{ padding: '8px 12px', fontWeight: 700, whiteSpace: 'nowrap' }}>Status</th>
               </tr>
             </thead>
             <tbody>

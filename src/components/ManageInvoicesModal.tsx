@@ -127,16 +127,26 @@ export const ManageInvoicesModal: React.FC<{ isOpen: boolean; onClose: () => voi
         </div>
 
         {/* Invoices Table */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
-          <table className="hub-table">
+        <div
+          className="hub-table-container"
+          style={{
+            flex: 1,
+            overflowY: 'auto',
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            padding: '16px 20px',
+            minWidth: 0
+          }}
+        >
+          <table className="hub-table" style={{ width: '100%', minWidth: 620, borderCollapse: 'separate' }}>
             <thead>
               <tr>
-                <th>Invoice Code</th>
-                <th>Client / Project</th>
-                <th>Amount</th>
-                <th>Due Date</th>
-                <th>Status</th>
-                <th style={{ textAlign: 'right' }}>Actions</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 120 }}>Invoice Code</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 160 }}>Client / Project</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 90 }}>Amount</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 110 }}>Due Date</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 100 }}>Status</th>
+                <th style={{ textAlign: 'right', whiteSpace: 'nowrap', minWidth: 90 }}>Actions</th>
               </tr>
             </thead>
             <tbody>

@@ -93,13 +93,24 @@ export const ResponsiveDonutChart: React.FC<ResponsiveDonutChartProps> = ({
       </div>
 
       {showTableView ? (
-        <div style={{ overflowX: 'auto', border: '1px solid var(--border-subtle)', borderRadius: 6 }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem', textAlign: 'left' }}>
+        <div
+          className="hub-table-container"
+          style={{
+            overflowX: 'auto',
+            width: '100%',
+            maxWidth: '100%',
+            minWidth: 0,
+            WebkitOverflowScrolling: 'touch',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 6
+          }}
+        >
+          <table style={{ width: '100%', minWidth: 320, borderCollapse: 'collapse', fontSize: '0.78rem', textAlign: 'left' }}>
             <thead>
               <tr style={{ backgroundColor: 'var(--bg-surface-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>
-                <th style={{ padding: '6px 10px' }}>Category</th>
-                <th style={{ padding: '6px 10px' }}>Amount ({currency})</th>
-                <th style={{ padding: '6px 10px' }}>Share %</th>
+                <th style={{ padding: '6px 10px', whiteSpace: 'nowrap' }}>Category</th>
+                <th style={{ padding: '6px 10px', whiteSpace: 'nowrap' }}>Amount ({currency})</th>
+                <th style={{ padding: '6px 10px', whiteSpace: 'nowrap' }}>Share %</th>
               </tr>
             </thead>
             <tbody>

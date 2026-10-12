@@ -314,6 +314,18 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
+  flex-shrink: 0;
+}
+
+/* Global button text protection to prevent word break splitting */
+button, .btn-primary, .btn-secondary, .btn-danger, .btn-ghost {
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
 .ceo-benchmark-badge {
@@ -326,6 +338,111 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
+}
+
+/* Board Packs Authenticated Delegate Badge */
+.board-delegate-badge {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 4px 8px !important;
+  border-radius: var(--radius-sm) !important;
+  line-height: 1.15 !important;
+  gap: 1px !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}
+
+.board-delegate-badge .delegate-line-1 {
+  font-size: 0.58rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  display: block !important;
+}
+
+.board-delegate-badge .delegate-line-2 {
+  font-size: 0.52rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1.1 !important;
+  opacity: 0.9 !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  display: block !important;
+}
+
+/* Board Pack item and download button styles */
+.board-pack-item {
+  padding: 12px 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background-color: var(--bg-surface-secondary);
+  transition: all 0.15s ease;
+}
+
+.board-pack-item:hover {
+  border-color: rgba(65, 0, 245, 0.25);
+  background-color: #FFFFFF;
+}
+
+.board-pack-download-btn {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--electric-violet);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--electric-violet);
+  background: #FFFFFF;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-width: 82px;
+  transition: all 0.15s ease;
+}
+
+.board-pack-download-btn:hover {
+  background-color: var(--electric-violet-light);
+}
+
+.board-pack-download-btn .btn-line-1 {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  line-height: 1.15;
+}
+
+.board-pack-download-btn .btn-line-2 {
+  display: block;
+  font-size: 0.66rem;
+  font-weight: 600;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  line-height: 1.15;
 }
 
 .badge-healthy {
@@ -762,13 +879,27 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     height: 60px !important;
   }
   .hub-card {
-    padding: 16px 14px !important;
+    padding: 14px 12px !important;
     border-radius: var(--radius-md) !important;
     max-width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-    word-break: break-word !important;
+    word-break: normal !important;
     overflow-wrap: break-word !important;
+  }
+  .board-pack-item {
+    padding: 10px 10px !important;
+    gap: 8px !important;
+  }
+  .board-pack-download-btn {
+    padding: 5px 8px !important;
+    min-width: 76px !important;
+  }
+  .board-pack-download-btn .btn-line-1 {
+    font-size: 0.68rem !important;
+  }
+  .board-pack-download-btn .btn-line-2 {
+    font-size: 0.62rem !important;
   }
   .hub-table-container {
     width: 100% !important;
