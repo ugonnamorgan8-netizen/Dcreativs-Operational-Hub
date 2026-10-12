@@ -70,7 +70,8 @@ export const Sidebar: React.FC = () => {
             borderBottom: '1px solid var(--border-dark)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            flexShrink: 0
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -142,7 +143,19 @@ export const Sidebar: React.FC = () => {
         </div>
 
         {/* Scrollable Navigation Area - Strictly Restricted by Role */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '14px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <div
+          className="sidebar-scroll-area"
+          style={{
+            flex: '1 1 auto',
+            minHeight: 0,
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            padding: '14px 12px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 4
+          }}
+        >
           {/* CEO Dedicated Workspace */}
           {role === 'CEO' && (
             <>
@@ -574,6 +587,25 @@ export const Sidebar: React.FC = () => {
             </>
           )}
 
+          {/* Direct Sign Out Action in Navigation List */}
+          <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <button
+              type="button"
+              onClick={logout}
+              className="sidebar-nav-item"
+              style={{
+                color: '#F87171',
+                fontWeight: 600,
+                backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                border: '1px solid rgba(239, 68, 68, 0.2)',
+                cursor: 'pointer'
+              }}
+            >
+              <LogOut size={18} color="#EF4444" />
+              <span>Log Out</span>
+            </button>
+          </div>
+
           {/* Zero-Leak Security Badge */}
           <div style={{ marginTop: 'auto', padding: '12px 6px' }}>
             <div
@@ -595,109 +627,138 @@ export const Sidebar: React.FC = () => {
           </div>
         </div>
 
-        {/* Offline Toggle Simulator */}
+        {/* Sidebar Sticky Footer Group */}
         <div
+          className="sidebar-footer-group"
           style={{
-            padding: '10px 16px',
+            flexShrink: 0,
+            marginTop: 'auto',
+            backgroundColor: 'var(--sidebar-navy)',
             borderTop: '1px solid var(--border-dark)',
-            backgroundColor: 'rgba(0, 4, 34, 0.4)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
+            zIndex: 10
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.78rem', color: isOffline ? '#F87171' : '#34D399' }}>
-            {isOffline ? <WifiOff size={15} /> : <Wifi size={15} />}
-            <span>{isOffline ? 'Offline Mode (Shell)' : 'Live Network'}</span>
-          </div>
-          <button
-            onClick={() => setIsOffline(!isOffline)}
+          {/* Offline Toggle Simulator */}
+          <div
             style={{
-              fontSize: '0.68rem',
-              color: '#A5B4FC',
-              textDecoration: 'underline',
-              padding: '2px 4px'
+              padding: '8px 16px',
+              backgroundColor: 'rgba(0, 4, 34, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexShrink: 0
             }}
           >
-            {isOffline ? 'Go Online' : 'Simulate'}
-          </button>
-        </div>
-
-        {/* User Account Card - Strictly Locked, No Role or Persona Switching Controls */}
-        <div
-          style={{
-            padding: '16px',
-            borderTop: '1px solid var(--border-dark)'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.78rem', color: isOffline ? '#F87171' : '#34D399' }}>
+              {isOffline ? <WifiOff size={14} /> : <Wifi size={14} />}
+              <span>{isOffline ? 'Offline Mode (Shell)' : 'Live Network'}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsOffline(!isOffline)}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                textAlign: 'left',
-                padding: '4px',
-                flex: 1,
-                minWidth: 0
+                fontSize: '0.68rem',
+                color: '#A5B4FC',
+                textDecoration: 'underline',
+                padding: '2px 4px',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer'
               }}
             >
-              <img
-                src={currentProfile.avatarUrl}
-                alt={currentProfile.name}
+              {isOffline ? 'Go Online' : 'Simulate'}
+            </button>
+          </div>
+
+          {/* User Account Card - Strictly Locked, No Role or Persona Switching Controls */}
+          <div
+            style={{
+              padding: '12px 14px calc(14px + env(safe-area-inset-bottom, 0px))',
+              borderTop: '1px solid var(--border-dark)',
+              backgroundColor: 'var(--sidebar-navy)',
+              flexShrink: 0
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+              <div
                 style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '2px solid var(--lavender)'
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  textAlign: 'left',
+                  flex: 1,
+                  minWidth: 0
                 }}
-              />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div
+              >
+                <img
+                  src={currentProfile.avatarUrl}
+                  alt={currentProfile.name}
                   style={{
-                    color: '#FFFFFF',
-                    fontWeight: 600,
-                    fontSize: '0.85rem',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
+                    width: 36,
+                    height: 36,
+                    minWidth: 36,
+                    minHeight: 36,
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    border: '2px solid var(--lavender)',
+                    flexShrink: 0
                   }}
-                >
-                  {currentProfile.name}
-                </div>
-                <div
-                  style={{
-                    color: '#885FFF',
-                    fontSize: '0.7rem',
-                    fontWeight: 600,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}
-                >
-                  {currentProfile.role}
+                />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div
+                    style={{
+                      color: '#FFFFFF',
+                      fontWeight: 600,
+                      fontSize: '0.84rem',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}
+                  >
+                    {currentProfile.name}
+                  </div>
+                  <div
+                    style={{
+                      color: '#885FFF',
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}
+                  >
+                    {currentProfile.role}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Logout button */}
-            <button
-              onClick={logout}
-              title="Sign Out"
-              style={{
-                padding: 8,
-                color: '#EF4444',
-                borderRadius: 6,
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.2)'
-              }}
-            >
-              <LogOut size={16} />
-            </button>
+              {/* Logout button */}
+              <button
+                type="button"
+                onClick={logout}
+                title="Sign Out"
+                aria-label="Sign Out"
+                style={{
+                  padding: '7px 11px',
+                  color: '#EF4444',
+                  borderRadius: 6,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  justifyContent: 'center',
+                  backgroundColor: 'rgba(239, 68, 68, 0.14)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  cursor: 'pointer',
+                  flexShrink: 0,
+                  fontWeight: 700,
+                  fontSize: '0.76rem',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                <LogOut size={15} />
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         </div>
       </aside>
