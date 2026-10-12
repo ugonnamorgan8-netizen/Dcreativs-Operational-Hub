@@ -74,6 +74,10 @@ import {
 
 export type { AppView };
 
+const SESSION_TIMEOUT_MS = 5 * 60 * 1000; // 5-minute inactivity/return timeout
+const STORAGE_USER_ID_KEY = 'dcreativs_current_user_id';
+const STORAGE_LAST_ACTIVE_KEY = 'dcreativs_last_active_time';
+
 interface AppContextType {
   // Auth & Session
   isAuthenticated: boolean;
@@ -291,15 +295,36 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [allProfiles, setAllProfiles] = useState<UserProfile[]>(INITIAL_PROFILES);
   const [currentProfile, setCurrentProfile] = useState<UserProfile>(() => {
-    const savedId = localStorage.getItem('dcreativs_current_user_id');
+    const savedId = localStorage.getItem(STORAGE_USER_ID_KEY);
+    const lastActiveStr = localStorage.getItem(STORAGE_LAST_ACTIVE_KEY);
     if (savedId) {
+      if (lastActiveStr) {
+        const elapsed = Date.now() - parseInt(lastActiveStr, 10);
+        if (elapsed > SESSION_TIMEOUT_MS) {
+          localStorage.removeItem(STORAGE_USER_ID_KEY);
+          localStorage.removeItem(STORAGE_LAST_ACTIVE_KEY);
+          return INITIAL_PROFILES[0];
+        }
+      }
       const found = INITIAL_PROFILES.find((p) => p.id === savedId);
       if (found) return found;
     }
     return INITIAL_PROFILES[0];
   });
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return !!localStorage.getItem('dcreativs_current_user_id');
+    const savedId = localStorage.getItem(STORAGE_USER_ID_KEY);
+    const lastActiveStr = localStorage.getItem(STORAGE_LAST_ACTIVE_KEY);
+    if (!savedId) return false;
+    if (lastActiveStr) {
+      const elapsed = Date.now() - parseInt(lastActiveStr, 10);
+      if (elapsed > SESSION_TIMEOUT_MS) {
+        localStorage.removeItem(STORAGE_USER_ID_KEY);
+        localStorage.removeItem(STORAGE_LAST_ACTIVE_KEY);
+        return false;
+      }
+    }
+    localStorage.setItem(STORAGE_LAST_ACTIVE_KEY, Date.now().toString());
+    return true;
   });
 
   // Active workspace is statically locked to the role's primary workspace
@@ -308,8 +333,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   const [activeView, setActiveView] = useState<AppView>(() => {
-    const savedId = localStorage.getItem('dcreativs_current_user_id');
+    const savedId = localStorage.getItem(STORAGE_USER_ID_KEY);
+    const lastActiveStr = localStorage.getItem(STORAGE_LAST_ACTIVE_KEY);
     if (savedId) {
+      if (lastActiveStr) {
+        const elapsed = Date.now() - parseInt(lastActiveStr, 10);
+        if (elapsed > SESSION_TIMEOUT_MS) {
+          return 'ceo-overview';
+        }
+      }
       const found = INITIAL_PROFILES.find((p) => p.id === savedId);
       if (found) return getDefaultViewForRole(found.role);
     }
@@ -501,7 +533,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     setCurrentProfile(found);
     setIsAuthenticated(true);
-    localStorage.setItem('dcreativs_current_user_id', found.id);
+    localStorage.setItem(STORAGE_USER_ID_KEY, found.id);
+    localStorage.setItem(STORAGE_LAST_ACTIVE_KEY, Date.now().toString());
 
     const targetView = getDefaultViewForRole(found.role);
     setActiveView(targetView);
@@ -540,6 +573,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setAllProfiles((prev) => [newProfile, ...prev]);
     setCurrentProfile(newProfile);
     setIsAuthenticated(true);
+    localStorage.setItem(STORAGE_USER_ID_KEY, newId);
+    localStorage.setItem(STORAGE_LAST_ACTIVE_KEY, Date.now().toString());
     const targetView = getDefaultViewForRole(input.role);
     setActiveView(targetView);
 
@@ -596,9 +631,73 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Logout handler
   const logout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem('dcreativs_current_user_id');
+    localStorage.removeItem(STORAGE_USER_ID_KEY);
+    localStorage.removeItem(STORAGE_LAST_ACTIVE_KEY);
     addAuditEvent('auth.session.logout', `user:${currentProfile.id}`, `User logged out`);
   };
+
+  // 5-minute session timeout & return activity tracker
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const checkSessionExpiry = () => {
+      const lastActiveStr = localStorage.getItem(STORAGE_LAST_ACTIVE_KEY);
+      if (!lastActiveStr) {
+        localStorage.setItem(STORAGE_LAST_ACTIVE_KEY, Date.now().toString());
+        return;
+      }
+      const elapsed = Date.now() - parseInt(lastActiveStr, 10);
+      if (elapsed > SESSION_TIMEOUT_MS) {
+        setIsAuthenticated(false);
+        localStorage.removeItem(STORAGE_USER_ID_KEY);
+        localStorage.removeItem(STORAGE_LAST_ACTIVE_KEY);
+        addAuditEvent(
+          'auth.session.timeout',
+          `user:${currentProfile.id}`,
+          'Session expired after more than 5 minutes of inactivity or absence. Login required.'
+        );
+      }
+    };
+
+    let lastRecordTime = Date.now();
+    const recordActivity = () => {
+      const now = Date.now();
+      // Throttle localStorage updates to at most once every 2 seconds
+      if (now - lastRecordTime >= 2000) {
+        lastRecordTime = now;
+        localStorage.setItem(STORAGE_LAST_ACTIVE_KEY, now.toString());
+      }
+    };
+
+    // Recheck immediately whenever user returns to the tab or page regains focus
+    const handleReturn = () => {
+      if (document.visibilityState === 'visible') {
+        checkSessionExpiry();
+      }
+    };
+
+    const userEvents = ['mousedown', 'keydown', 'touchstart', 'scroll', 'pointerdown'];
+    userEvents.forEach((evt) => {
+      window.addEventListener(evt, recordActivity, { passive: true });
+    });
+
+    document.addEventListener('visibilitychange', handleReturn);
+    window.addEventListener('focus', handleReturn);
+
+    // Periodic check every 10 seconds while tab remains open
+    const intervalId = window.setInterval(() => {
+      checkSessionExpiry();
+    }, 10000);
+
+    return () => {
+      userEvents.forEach((evt) => {
+        window.removeEventListener(evt, recordActivity);
+      });
+      document.removeEventListener('visibilitychange', handleReturn);
+      window.removeEventListener('focus', handleReturn);
+      window.clearInterval(intervalId);
+    };
+  }, [isAuthenticated, currentProfile.id]);
 
   // Add audit event helper
   const addAuditEvent = (action: string, resource: string, details: string, reason?: string) => {

@@ -587,25 +587,6 @@ export const Sidebar: React.FC = () => {
             </>
           )}
 
-          {/* Direct Sign Out Action in Navigation List */}
-          <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-            <button
-              type="button"
-              onClick={logout}
-              className="sidebar-nav-item"
-              style={{
-                color: '#F87171',
-                fontWeight: 600,
-                backgroundColor: 'rgba(239, 68, 68, 0.08)',
-                border: '1px solid rgba(239, 68, 68, 0.2)',
-                cursor: 'pointer'
-              }}
-            >
-              <LogOut size={18} color="#EF4444" />
-              <span>Log Out</span>
-            </button>
-          </div>
-
           {/* Zero-Leak Security Badge */}
           <div style={{ marginTop: 'auto', padding: '12px 6px' }}>
             <div
@@ -672,6 +653,7 @@ export const Sidebar: React.FC = () => {
 
           {/* User Account Card - Strictly Locked, No Role or Persona Switching Controls */}
           <div
+            className="sidebar-user-session-card"
             style={{
               padding: '12px 14px calc(14px + env(safe-area-inset-bottom, 0px))',
               borderTop: '1px solid var(--border-dark)',
