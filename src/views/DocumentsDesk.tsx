@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   FileText,
   Upload,
@@ -48,6 +48,19 @@ export const DocumentsDesk: React.FC = () => {
   } = useApp();
 
   const role = currentProfile.role;
+
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth <= 1024;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Native device file upload input ref
   const deviceFileInputRef = useRef<HTMLInputElement>(null);
@@ -356,23 +369,37 @@ export const DocumentsDesk: React.FC = () => {
           border: '1px solid rgba(65, 0, 245, 0.15)'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div
+          className="doc-desk-header-title-group"
+          style={{
+            display: 'flex',
+            alignItems: isMobile ? 'flex-start' : 'center',
+            gap: isMobile ? 10 : 14
+          }}
+        >
           <div
+            className="doc-desk-header-icon-box"
             style={{
-              width: 44,
-              height: 44,
-              borderRadius: 12,
+              width: isMobile ? 32 : 44,
+              height: isMobile ? 32 : 44,
+              minWidth: isMobile ? 32 : 44,
+              minHeight: isMobile ? 32 : 44,
+              borderRadius: isMobile ? 8 : 12,
               background: 'linear-gradient(135deg, var(--midnight) 0%, var(--electric-violet) 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#FFFFFF'
+              color: '#FFFFFF',
+              flexShrink: 0,
+              aspectRatio: '1 / 1',
+              marginTop: isMobile ? 2 : 0
             }}
           >
-            <FileText size={24} />
+            <FileText className="doc-desk-header-icon" size={isMobile ? 18 : 24} />
           </div>
-          <div>
+          <div className="doc-desk-header-text" style={{ flex: 1, minWidth: 0 }}>
             <h1
+              className="doc-desk-header-title"
               style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: '1.35rem',
@@ -969,203 +996,346 @@ export const DocumentsDesk: React.FC = () => {
       {/* MODAL 2: EXTRACTION INSPECTION & COLUMN MAPPING */}
       {selectedJob && (
         <div className="modal-backdrop">
-          <div className="modal-content" style={{ maxWidth: 840, maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-              <div>
-                <span
+          <div
+            className="modal-content"
+            style={{
+              maxWidth: 860,
+              width: '100%',
+              maxHeight: isMobile ? '94vh' : '88vh',
+              display: 'flex',
+              flexDirection: 'column',
+              padding: 0,
+              overflow: 'hidden',
+              borderRadius: isMobile ? 12 : 16,
+              boxShadow: '0 25px 60px -15px rgba(0, 4, 34, 0.45)',
+              border: '1px solid var(--border-subtle)',
+              backgroundColor: '#FFFFFF'
+            }}
+          >
+            {/* Header */}
+            <div
+              style={{
+                padding: isMobile ? '12px 14px' : '18px 24px',
+                borderBottom: '1px solid var(--border-subtle)',
+                backgroundColor: 'var(--bg-surface)',
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+                gap: 12,
+                flexShrink: 0
+              }}
+            >
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
+                  <span
+                    style={{
+                      fontSize: '0.68rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.04em',
+                      padding: '3px 8px',
+                      borderRadius: 4,
+                      backgroundColor: 'var(--electric-violet-light)',
+                      color: 'var(--electric-violet)',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    7-STAGE EXTRACTION PIPELINE · {selectedJob.status}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      padding: '3px 8px',
+                      borderRadius: 4,
+                      backgroundColor: 'var(--bg-surface-secondary)',
+                      color: 'var(--text-muted)',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {selectedJob.format}
+                  </span>
+                </div>
+                <h3
                   style={{
-                    fontSize: '0.7rem',
-                    fontWeight: 700,
-                    padding: '2px 6px',
-                    borderRadius: 4,
-                    backgroundColor: 'var(--electric-violet-light)',
-                    color: 'var(--electric-violet)'
+                    fontSize: isMobile ? '1.02rem' : '1.25rem',
+                    fontWeight: 800,
+                    color: 'var(--text-heading)',
+                    margin: '2px 0 4px',
+                    lineHeight: 1.25,
+                    wordBreak: 'break-word'
                   }}
                 >
-                  7-STAGE EXTRACTION PIPELINE · {selectedJob.status}
-                </span>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-heading)', margin: '4px 0 0' }}>
                   {selectedJob.documentTitle}
                 </h3>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                  File: {selectedJob.fileName} ({selectedJob.format})
+                <div
+                  style={{
+                    fontSize: '0.76rem',
+                    color: 'var(--text-muted)',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}
+                >
+                  File: <span style={{ fontFamily: 'monospace' }}>{selectedJob.fileName}</span>
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setSelectedJob(null)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, color: 'var(--text-muted)' }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 8,
+                  borderRadius: 6,
+                  color: 'var(--text-muted)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  marginTop: -2
+                }}
+                title="Close"
               >
                 <X size={20} />
               </button>
             </div>
 
-            {/* Stage Indicator */}
+            {/* Scrollable Body */}
             <div
               style={{
+                flex: 1,
+                overflowY: 'auto',
+                WebkitOverflowScrolling: 'touch',
+                padding: isMobile ? '14px 14px' : '20px 24px',
                 display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '10px 14px',
-                backgroundColor: 'var(--bg-surface-secondary)',
-                borderRadius: 6,
-                fontSize: '0.74rem',
-                color: 'var(--text-muted)',
-                marginBottom: 16,
-                overflowX: 'auto'
+                flexDirection: 'column',
+                gap: 16
               }}
             >
-              <span style={{ fontWeight: 700, color: '#059669' }}>1. Upload ✓</span>
-              <span>→</span>
-              <span style={{ fontWeight: 700, color: '#059669' }}>2. Validate ✓</span>
-              <span>→</span>
-              <span style={{ fontWeight: 700, color: '#059669' }}>3. Extract ✓</span>
-              <span>→</span>
-              <span style={{ fontWeight: 700, color: 'var(--electric-violet)' }}>4. Preview & Map</span>
-              <span>→</span>
-              <span>5. Propose</span>
-              <span>→</span>
-              <span>6. Authorized Review</span>
-              <span>→</span>
-              <span>7. Apply</span>
-            </div>
-
-            {/* Duplicate Alerts */}
-            {selectedJob.duplicateAlerts && selectedJob.duplicateAlerts.length > 0 && (
+              {/* Stage Indicator */}
               <div
                 style={{
-                  padding: '12px 14px',
-                  backgroundColor: '#FEF3C7',
-                  border: '1px solid #FCD34D',
-                  borderRadius: 6,
-                  fontSize: '0.8rem',
-                  color: '#92400E',
-                  marginBottom: 16
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '10px 14px',
+                  backgroundColor: 'var(--bg-surface-secondary)',
+                  borderRadius: 8,
+                  fontSize: '0.74rem',
+                  color: 'var(--text-muted)',
+                  overflowX: 'auto',
+                  WebkitOverflowScrolling: 'touch',
+                  whiteSpace: 'nowrap',
+                  border: '1px solid var(--border-subtle)',
+                  scrollbarWidth: 'thin'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, marginBottom: 4 }}>
-                  <AlertTriangle size={15} />
-                  <span>Duplicate Record / Conflict Detection:</span>
-                </div>
-                {selectedJob.duplicateAlerts.map((alert, idx) => (
-                  <div key={idx}>• {alert}</div>
-                ))}
+                <span style={{ fontWeight: 700, color: '#059669', flexShrink: 0, whiteSpace: 'nowrap' }}>1. Upload ✓</span>
+                <span style={{ color: 'var(--border-subtle)', flexShrink: 0 }}>→</span>
+                <span style={{ fontWeight: 700, color: '#059669', flexShrink: 0, whiteSpace: 'nowrap' }}>2. Validate ✓</span>
+                <span style={{ color: 'var(--border-subtle)', flexShrink: 0 }}>→</span>
+                <span style={{ fontWeight: 700, color: '#059669', flexShrink: 0, whiteSpace: 'nowrap' }}>3. Extract ✓</span>
+                <span style={{ color: 'var(--border-subtle)', flexShrink: 0 }}>→</span>
+                <span style={{ fontWeight: 800, color: 'var(--electric-violet)', flexShrink: 0, whiteSpace: 'nowrap', backgroundColor: 'var(--electric-violet-light)', padding: '2px 8px', borderRadius: 4 }}>4. Preview & Map</span>
+                <span style={{ color: 'var(--border-subtle)', flexShrink: 0 }}>→</span>
+                <span style={{ flexShrink: 0, whiteSpace: 'nowrap' }}>5. Propose</span>
+                <span style={{ color: 'var(--border-subtle)', flexShrink: 0 }}>→</span>
+                <span style={{ flexShrink: 0, whiteSpace: 'nowrap' }}>6. Authorized Review</span>
+                <span style={{ color: 'var(--border-subtle)', flexShrink: 0 }}>→</span>
+                <span style={{ flexShrink: 0, whiteSpace: 'nowrap' }}>7. Apply</span>
               </div>
-            )}
 
-            {/* Extracted Fields Table with Editable Values */}
-            <h4 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-heading)', margin: '0 0 8px' }}>
-              Extracted Data Fields & Source References
-            </h4>
-            <div style={{ overflowX: 'auto', marginBottom: 20, border: '1px solid var(--border-subtle)', borderRadius: 6 }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ backgroundColor: 'var(--bg-surface-secondary)', borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
-                    <th style={{ padding: '8px 12px' }}>Field</th>
-                    <th style={{ padding: '8px 12px' }}>Source Ref</th>
-                    <th style={{ padding: '8px 12px' }}>Extracted Value</th>
-                    <th style={{ padding: '8px 12px' }}>Corrected / Verified Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedJob.parsedFields.map((f, idx) => (
-                    <tr key={idx} style={{ borderBottom: '1px solid var(--border-light)' }}>
-                      <td style={{ padding: '8px 12px', fontWeight: 600 }}>{f.field}</td>
-                      <td style={{ padding: '8px 12px', color: 'var(--text-muted)', fontFamily: 'monospace' }}>{f.sourceRef}</td>
-                      <td style={{ padding: '8px 12px', color: 'var(--text-muted)' }}>{String(f.originalValue)}</td>
-                      <td style={{ padding: '8px 12px' }}>
-                        <input
-                          type="text"
-                          value={String(f.correctedValue)}
-                          disabled={selectedJob.status === 'APPLIED'}
-                          onChange={(e) => updateExtractionParsedField(selectedJob.id, idx, e.target.value)}
-                          style={{
-                            width: '100%',
-                            padding: '4px 8px',
-                            borderRadius: 4,
-                            border: '1px solid var(--border-subtle)',
-                            fontSize: '0.82rem'
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Column Mappings if Spreadsheet */}
-            {selectedJob.columnMappings && (
-              <>
-                <h4 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-heading)', margin: '0 0 8px' }}>
-                  Spreadsheet Column to Business Record Mapping
-                </h4>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginBottom: 20 }}>
-                  {selectedJob.columnMappings.map((col, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        padding: '10px 12px',
-                        backgroundColor: 'var(--bg-surface-secondary)',
-                        borderRadius: 6,
-                        border: '1px solid var(--border-subtle)',
-                        fontSize: '0.78rem'
-                      }}
-                    >
-                      <div style={{ color: 'var(--text-muted)' }}>Source: <strong>{col.sourceColumn}</strong></div>
-                      <div style={{ marginTop: 4 }}>Maps To: <strong style={{ color: 'var(--electric-violet)' }}>{col.destinationField}</strong></div>
-                    </div>
+              {/* Duplicate Alerts */}
+              {selectedJob.duplicateAlerts && selectedJob.duplicateAlerts.length > 0 && (
+                <div
+                  style={{
+                    padding: '12px 14px',
+                    backgroundColor: '#FEF3C7',
+                    border: '1px solid #FCD34D',
+                    borderRadius: 8,
+                    fontSize: '0.8rem',
+                    color: '#92400E'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, marginBottom: 4 }}>
+                    <AlertTriangle size={15} />
+                    <span>Duplicate Record / Conflict Detection:</span>
+                  </div>
+                  {selectedJob.duplicateAlerts.map((alert, idx) => (
+                    <div key={idx}>• {alert}</div>
                   ))}
                 </div>
-              </>
-            )}
+              )}
 
-            {/* Parsed Rows Preview (e.g. Student lists or Line Items) */}
-            {selectedJob.parsedRows && selectedJob.parsedRows.length > 0 && (
-              <div style={{ marginBottom: 18 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+              {/* Extracted Fields Table with Editable Values */}
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8, flexWrap: 'wrap', gap: 6 }}>
                   <h4 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-heading)', margin: 0 }}>
-                    Extracted Records Preview ({selectedJob.parsedRows.length} Items)
+                    Extracted Data Fields & Source References
                   </h4>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--electric-violet)', backgroundColor: 'rgba(65, 0, 245, 0.08)', padding: '2px 8px', borderRadius: 4 }}>
-                    Destination: {selectedJob.category === 'ACADEMY' ? 'Central Learner Registry' : 'Production Ledger'}
-                  </span>
+                  {isMobile && (
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                      Scroll table →
+                    </span>
+                  )}
                 </div>
-                <div style={{ border: '1px solid var(--border-subtle)', borderRadius: 6, overflowX: 'auto', maxHeight: 150, fontSize: '0.76rem' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <div
+                  className="hub-table-container"
+                  style={{
+                    overflowX: 'auto',
+                    WebkitOverflowScrolling: 'touch',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: 8,
+                    backgroundColor: 'var(--bg-surface)'
+                  }}
+                >
+                  <table style={{ width: '100%', minWidth: 640, borderCollapse: 'collapse', fontSize: '0.82rem', textAlign: 'left' }}>
                     <thead>
-                      <tr style={{ backgroundColor: 'var(--bg-surface-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>
-                        <th style={{ padding: '6px 10px' }}>#</th>
-                        {Object.keys(selectedJob.parsedRows[0].data).map((key) => (
-                          <th key={key} style={{ padding: '6px 10px' }}>{key}</th>
-                        ))}
+                      <tr style={{ backgroundColor: 'var(--bg-surface-secondary)', borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
+                        <th style={{ padding: '10px 14px', whiteSpace: 'nowrap', minWidth: 140 }}>Field</th>
+                        <th style={{ padding: '10px 14px', whiteSpace: 'nowrap', minWidth: 120 }}>Source Ref</th>
+                        <th style={{ padding: '10px 14px', whiteSpace: 'nowrap', minWidth: 150 }}>Extracted Value</th>
+                        <th style={{ padding: '10px 14px', whiteSpace: 'nowrap', minWidth: 200 }}>Corrected / Verified Value</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedJob.parsedRows.map((row) => (
-                        <tr key={row.rowNumber} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                          <td style={{ padding: '6px 10px', color: 'var(--text-muted)' }}>{row.rowNumber}</td>
-                          {Object.values(row.data).map((val, vi) => (
-                            <td key={vi} style={{ padding: '6px 10px', fontWeight: vi === 0 ? 600 : 400 }}>{String(val)}</td>
-                          ))}
+                      {selectedJob.parsedFields.map((f, idx) => (
+                        <tr key={idx} style={{ borderBottom: '1px solid var(--border-light)' }}>
+                          <td style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--text-heading)', whiteSpace: 'nowrap' }}>{f.field}</td>
+                          <td style={{ padding: '10px 14px', color: 'var(--text-muted)', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{f.sourceRef}</td>
+                          <td style={{ padding: '10px 14px', color: 'var(--text-main)', whiteSpace: 'nowrap' }}>{String(f.originalValue)}</td>
+                          <td style={{ padding: '8px 14px' }}>
+                            <input
+                              type="text"
+                              value={String(f.correctedValue)}
+                              disabled={selectedJob.status === 'APPLIED'}
+                              onChange={(e) => updateExtractionParsedField(selectedJob.id, idx, e.target.value)}
+                              style={{
+                                width: '100%',
+                                minWidth: 170,
+                                padding: '6px 10px',
+                                borderRadius: 6,
+                                border: '1px solid var(--border-subtle)',
+                                fontSize: '0.82rem',
+                                backgroundColor: selectedJob.status === 'APPLIED' ? 'var(--bg-surface-secondary)' : '#FFFFFF',
+                                color: 'var(--text-heading)',
+                                boxSizing: 'border-box'
+                              }}
+                            />
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
               </div>
-            )}
 
-            <div style={{ padding: '12px', backgroundColor: 'var(--bg-surface-secondary)', borderRadius: 6, fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 20 }}>
-              <strong>Proposed Changes Summary:</strong> {selectedJob.proposedChangesSummary}
+              {/* Column Mappings if Spreadsheet */}
+              {selectedJob.columnMappings && (
+                <div>
+                  <h4 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-heading)', margin: '0 0 8px' }}>
+                    Spreadsheet Column to Business Record Mapping
+                  </h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+                    {selectedJob.columnMappings.map((col, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          padding: '10px 12px',
+                          backgroundColor: 'var(--bg-surface-secondary)',
+                          borderRadius: 8,
+                          border: '1px solid var(--border-subtle)',
+                          fontSize: '0.78rem'
+                        }}
+                      >
+                        <div style={{ color: 'var(--text-muted)' }}>Source: <strong>{col.sourceColumn}</strong></div>
+                        <div style={{ marginTop: 4 }}>Maps To: <strong style={{ color: 'var(--electric-violet)' }}>{col.destinationField}</strong></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Parsed Rows Preview (e.g. Student lists or Line Items) */}
+              {selectedJob.parsedRows && selectedJob.parsedRows.length > 0 && (
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8, flexWrap: 'wrap', gap: 6 }}>
+                    <h4 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-heading)', margin: 0 }}>
+                      Extracted Records Preview ({selectedJob.parsedRows.length} Items)
+                    </h4>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--electric-violet)', backgroundColor: 'rgba(65, 0, 245, 0.08)', padding: '2px 8px', borderRadius: 4 }}>
+                      Destination: {selectedJob.category === 'ACADEMY' ? 'Central Learner Registry' : 'Production Ledger'}
+                    </span>
+                  </div>
+                  <div
+                    className="hub-table-container"
+                    style={{ border: '1px solid var(--border-subtle)', borderRadius: 8, overflowX: 'auto', maxHeight: 180, fontSize: '0.76rem' }}
+                  >
+                    <table style={{ width: '100%', minWidth: 480, borderCollapse: 'collapse', textAlign: 'left' }}>
+                      <thead>
+                        <tr style={{ backgroundColor: 'var(--bg-surface-secondary)', borderBottom: '1px solid var(--border-subtle)' }}>
+                          <th style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>#</th>
+                          {Object.keys(selectedJob.parsedRows[0].data).map((key) => (
+                            <th key={key} style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{key}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedJob.parsedRows.map((row) => (
+                          <tr key={row.rowNumber} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                            <td style={{ padding: '8px 12px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>{row.rowNumber}</td>
+                            {Object.values(row.data).map((val, vi) => (
+                              <td key={vi} style={{ padding: '8px 12px', fontWeight: vi === 0 ? 600 : 400, whiteSpace: 'nowrap' }}>{String(val)}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Proposed Changes Summary */}
+              <div
+                style={{
+                  padding: '12px 14px',
+                  backgroundColor: 'var(--bg-surface-secondary)',
+                  borderRadius: 8,
+                  fontSize: '0.8rem',
+                  color: 'var(--text-muted)',
+                  border: '1px solid var(--border-subtle)',
+                  lineHeight: 1.45
+                }}
+              >
+                <strong style={{ color: 'var(--text-heading)' }}>Proposed Changes Summary:</strong> {selectedJob.proposedChangesSummary}
+              </div>
             </div>
 
-            {/* Actions */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+            {/* Modal Footer */}
+            <div
+              style={{
+                padding: isMobile ? '12px 14px' : '16px 24px',
+                borderTop: '1px solid var(--border-subtle)',
+                backgroundColor: 'var(--bg-surface)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: isMobile ? 'stretch' : 'flex-end',
+                flexDirection: isMobile ? 'column-reverse' : 'row',
+                gap: 10,
+                flexShrink: 0
+              }}
+            >
               <button
                 type="button"
                 onClick={() => setSelectedJob(null)}
                 className="btn-secondary"
-                style={{ fontSize: '0.82rem' }}
+                style={{
+                  fontSize: '0.82rem',
+                  padding: '8px 16px',
+                  width: isMobile ? '100%' : 'auto',
+                  justifyContent: 'center'
+                }}
               >
                 Close
               </button>
@@ -1178,7 +1348,16 @@ export const DocumentsDesk: React.FC = () => {
                     setSelectedJob(null);
                   }}
                   className="btn-primary"
-                  style={{ fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: 6 }}
+                  style={{
+                    fontSize: '0.82rem',
+                    padding: '8px 18px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 6,
+                    width: isMobile ? '100%' : 'auto',
+                    whiteSpace: 'nowrap'
+                  }}
                 >
                   <CheckCircle size={15} />
                   <span>Authorized Review & Apply Records</span>

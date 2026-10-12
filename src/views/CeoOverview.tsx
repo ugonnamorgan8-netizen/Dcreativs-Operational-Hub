@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TrendingUp,
   FolderKanban,
@@ -23,6 +23,18 @@ export const CeoOverview: React.FC = () => {
   const { setActiveView, setIsActivityLogDrawerOpen, addAuditEvent, currency, currencyRate, currencySymbol } = useApp();
   const [selectedPeriod, setSelectedPeriod] = useState('Last 90 days');
   const [isPeriodMenuOpen, setIsPeriodMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth <= 1024;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Dynamic priority review queue state
   const [priorityItems, setPriorityItems] = useState([
@@ -581,12 +593,107 @@ export const CeoOverview: React.FC = () => {
         {/* Right: Academy Performance & Executive Governance Oversight */}
         <div className="hub-card" style={{ border: '1px solid rgba(65, 0, 245, 0.2)', display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <h3 style={{ fontSize: '1.05rem', color: 'var(--text-heading)', fontWeight: 700, margin: 0 }}>
+            <div style={{ width: '100%' }}>
+              <div
+                className="ceo-academy-header-row"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: isMobile ? 'space-between' : 'flex-start',
+                  gap: 8,
+                  width: '100%'
+                }}
+              >
+                <h3
+                  className="ceo-academy-title"
+                  style={{
+                    fontSize: isMobile ? '1rem' : '1.05rem',
+                    color: 'var(--text-heading)',
+                    fontWeight: 700,
+                    margin: 0,
+                    flex: isMobile ? 1 : 'none',
+                    minWidth: 0,
+                    lineHeight: 1.25
+                  }}
+                >
                   Academy & Governance Oversight
                 </h3>
-                <span className="badge badge-healthy">94.2% BENCHMARK</span>
+                <span
+                  className="badge badge-healthy ceo-benchmark-badge"
+                  style={isMobile ? {
+                    width: 48,
+                    height: 48,
+                    minWidth: 48,
+                    minHeight: 48,
+                    maxWidth: 48,
+                    maxHeight: 48,
+                    borderRadius: '50%',
+                    display: 'inline-flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 0,
+                    flexShrink: 0,
+                    boxSizing: 'border-box',
+                    textAlign: 'center',
+                    gap: 1,
+                    whiteSpace: 'nowrap',
+                    wordBreak: 'keep-all',
+                    overflowWrap: 'normal'
+                  } : undefined}
+                >
+                  <span
+                    className="ceo-benchmark-val"
+                    style={isMobile ? {
+                      fontSize: '0.55rem',
+                      fontWeight: 800,
+                      lineHeight: 1.1,
+                      letterSpacing: '-0.01em',
+                      whiteSpace: 'nowrap',
+                      display: 'block'
+                    } : undefined}
+                  >
+                    94.2%
+                  </span>
+                  <span
+                    className="ceo-benchmark-lbl"
+                    style={isMobile ? {
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 1
+                    } : undefined}
+                  >
+                    <span
+                      className="ceo-benchmark-bench"
+                      style={isMobile ? {
+                        fontSize: '0.36rem',
+                        fontWeight: 700,
+                        lineHeight: 1.05,
+                        letterSpacing: '0.02em',
+                        whiteSpace: 'nowrap',
+                        wordBreak: 'keep-all',
+                        display: 'block'
+                      } : undefined}
+                    >
+                      BENCH
+                    </span>
+                    <span
+                      className="ceo-benchmark-mark"
+                      style={isMobile ? {
+                        fontSize: '0.36rem',
+                        fontWeight: 700,
+                        lineHeight: 1.05,
+                        letterSpacing: '0.02em',
+                        whiteSpace: 'nowrap',
+                        wordBreak: 'keep-all',
+                        display: 'block'
+                      } : undefined}
+                    >
+                      MARK
+                    </span>
+                  </span>
+                </span>
               </div>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 4, margin: 0 }}>
                 Company-wide educational operations & compliance metrics
@@ -649,45 +756,63 @@ export const CeoOverview: React.FC = () => {
               Items needing your attention before Friday
             </p>
           </div>
+          {isMobile && (
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+              Scroll →
+            </span>
+          )}
         </div>
 
-        <div style={{ overflowX: 'auto' }}>
-          <table className="hub-table">
+        <div
+          className="hub-table-container"
+          style={{
+            overflowX: 'auto',
+            width: '100%',
+            maxWidth: '100%',
+            minWidth: 0,
+            WebkitOverflowScrolling: 'touch',
+            border: '1px solid var(--border-subtle)',
+            borderRadius: 'var(--radius-sm)'
+          }}
+        >
+          <table className="hub-table" style={{ width: '100%', minWidth: 560, borderCollapse: 'separate' }}>
             <thead>
               <tr>
-                <th>Project</th>
-                <th>Client</th>
-                <th>Due</th>
-                <th>Status</th>
-                <th style={{ textAlign: 'right' }}>Action</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 170 }}>Project</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 100 }}>Client</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 90 }}>Due</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 110 }}>Status</th>
+                <th style={{ textAlign: 'right', whiteSpace: 'nowrap', minWidth: 90 }}>Action</th>
               </tr>
             </thead>
             <tbody>
               {priorityItems.map((item) => (
                 <tr key={item.id}>
-                  <td style={{ fontWeight: 600 }}>{item.project}</td>
-                  <td style={{ color: 'var(--text-muted)' }}>{item.client}</td>
-                  <td>{item.due}</td>
-                  <td>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <td style={{ fontWeight: 600, whiteSpace: 'nowrap' }}>{item.project}</td>
+                  <td style={{ color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>{item.client}</td>
+                  <td style={{ whiteSpace: 'nowrap' }}>{item.due}</td>
+                  <td style={{ whiteSpace: 'nowrap' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
                       <span
                         style={{
                           width: 8,
                           height: 8,
                           borderRadius: '50%',
-                          backgroundColor: item.statusColor
+                          backgroundColor: item.statusColor,
+                          flexShrink: 0
                         }}
                       />
-                      <span style={{ fontSize: '0.82rem' }}>{item.status}</span>
+                      <span style={{ fontSize: '0.82rem', whiteSpace: 'nowrap' }}>{item.status}</span>
                     </span>
                   </td>
-                  <td style={{ textAlign: 'right' }}>
+                  <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                     <button
                       onClick={() => handleItemAction(item.id, item.actionType, item.project)}
                       style={{
                         color: item.completed ? '#10B981' : 'var(--electric-violet)',
                         fontWeight: 700,
-                        fontSize: '0.85rem'
+                        fontSize: '0.85rem',
+                        whiteSpace: 'nowrap'
                       }}
                       disabled={item.completed}
                     >
