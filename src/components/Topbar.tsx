@@ -104,85 +104,85 @@ export const Topbar: React.FC = () => {
             </span>
           </div>
 
-          {/* Right: Notification bell only */}
+          {/* Right: Notification bell */}
           <div style={{ position: 'relative', flexShrink: 0 }}>
             <button
               onClick={() => setIsNotifOpen(!isNotifOpen)}
-              style={{
-                width: 38,
-                height: 38,
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border-subtle)',
-                backgroundColor: 'var(--bg-surface-secondary)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                color: 'var(--text-muted)',
-                cursor: 'pointer'
-              }}
-              aria-label="View notifications"
-            >
-              <Bell size={18} />
-              {unreadCount > 0 && (
-                <span style={{
-                  position: 'absolute', top: 7, right: 7,
-                  width: 8, height: 8, borderRadius: '50%',
-                  backgroundColor: '#EF4444',
-                  boxShadow: '0 0 0 2px #FFFFFF'
-                }} />
-              )}
-            </button>
+                style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1px solid var(--border-subtle)',
+                  backgroundColor: 'var(--bg-surface-secondary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  color: 'var(--text-muted)',
+                  cursor: 'pointer'
+                }}
+                aria-label="View notifications"
+              >
+                <Bell size={18} />
+                {unreadCount > 0 && (
+                  <span style={{
+                    position: 'absolute', top: 7, right: 7,
+                    width: 8, height: 8, borderRadius: '50%',
+                    backgroundColor: '#EF4444',
+                    boxShadow: '0 0 0 2px #FFFFFF'
+                  }} />
+                )}
+              </button>
 
-            {isNotifOpen && (
-              <div style={{
-                position: 'fixed',
-                top: 60,
-                left: 8,
-                right: 8,
-                backgroundColor: '#FFFFFF',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: 'var(--radius-md)',
-                boxShadow: 'var(--shadow-lg)',
-                zIndex: 200,
-                overflow: 'hidden',
-                maxHeight: '70vh',
-                display: 'flex',
-                flexDirection: 'column'
-              }}>
-                <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'var(--bg-surface-secondary)' }}>
-                  <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-heading)' }}>
-                    Notifications ({unreadCount})
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    {unreadCount > 0 && (
-                      <button onClick={markAllNotificationsAsRead} style={{ fontSize: '0.72rem', color: 'var(--electric-violet)', fontWeight: 600, cursor: 'pointer' }}>
-                        Mark all read
-                      </button>
-                    )}
-                    <button onClick={() => setIsNotifOpen(false)} style={{ color: 'var(--text-muted)', cursor: 'pointer' }}>
-                      <X size={16} />
-                    </button>
-                  </div>
-                </div>
-                <div style={{ overflowY: 'auto', flex: 1 }}>
-                  {notifications.map((notif) => (
-                    <div
-                      key={notif.id}
-                      onClick={() => { markNotificationAsRead(notif.id); setIsNotifOpen(false); }}
-                      style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-light)', backgroundColor: notif.read ? 'transparent' : 'rgba(65,0,245,0.03)', cursor: 'pointer' }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '0.8rem', fontWeight: notif.read ? 600 : 700, color: 'var(--text-heading)' }}>{notif.title}</span>
-                        <span style={{ fontSize: '0.68rem', color: 'var(--text-subtle)' }}>{notif.timestamp}</span>
-                      </div>
-                      <p style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: 4, lineHeight: 1.4 }}>{notif.message}</p>
+              {isNotifOpen && (
+                <div style={{
+                  position: 'fixed',
+                  top: 60,
+                  left: 8,
+                  right: 8,
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: 'var(--radius-md)',
+                  boxShadow: 'var(--shadow-lg)',
+                  zIndex: 200,
+                  overflow: 'hidden',
+                  maxHeight: '70vh',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}>
+                  <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'var(--bg-surface-secondary)' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-heading)' }}>
+                      Notifications ({unreadCount})
                     </div>
-                  ))}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      {unreadCount > 0 && (
+                        <button onClick={markAllNotificationsAsRead} style={{ fontSize: '0.72rem', color: 'var(--electric-violet)', fontWeight: 600, cursor: 'pointer' }}>
+                          Mark all read
+                        </button>
+                      )}
+                      <button onClick={() => setIsNotifOpen(false)} style={{ color: 'var(--text-muted)', cursor: 'pointer' }}>
+                        <X size={16} />
+                      </button>
+                    </div>
+                  </div>
+                  <div style={{ overflowY: 'auto', flex: 1 }}>
+                    {notifications.map((notif) => (
+                      <div
+                        key={notif.id}
+                        onClick={() => { markNotificationAsRead(notif.id); setIsNotifOpen(false); }}
+                        style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-light)', backgroundColor: notif.read ? 'transparent' : 'rgba(65,0,245,0.03)', cursor: 'pointer' }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <span style={{ fontSize: '0.8rem', fontWeight: notif.read ? 600 : 700, color: 'var(--text-heading)' }}>{notif.title}</span>
+                          <span style={{ fontSize: '0.68rem', color: 'var(--text-subtle)' }}>{notif.timestamp}</span>
+                        </div>
+                        <p style={{ fontSize: '0.76rem', color: 'var(--text-muted)', marginTop: 4, lineHeight: 1.4 }}>{notif.message}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
         </header>
       </>
     );
@@ -228,24 +228,30 @@ export const Topbar: React.FC = () => {
             </button>
 
             {isCurrencyMenuOpen && (
-              <div style={{ position: 'absolute', top: '100%', left: 0, marginTop: 6, width: 140, backgroundColor: '#FFFFFF', border: '1px solid var(--border-subtle)', borderRadius: 6, boxShadow: 'var(--shadow-lg)', zIndex: 50, padding: 4 }}>
-                {currencies.map((curr) => (
-                  <button
-                    key={curr.code}
-                    onClick={() => { setCurrency(curr.code); setIsCurrencyMenuOpen(false); }}
-                    style={{
-                      width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '7px 10px', borderRadius: 4, fontSize: '0.8rem',
-                      backgroundColor: curr.code === currency ? 'var(--electric-violet-light)' : 'transparent',
-                      color: curr.code === currency ? 'var(--electric-violet)' : 'var(--text-main)',
-                      fontWeight: curr.code === currency ? 700 : 500, cursor: 'pointer'
-                    }}
-                  >
-                    <span>{curr.label}</span>
-                    {curr.code === currency && <CheckCircle size={13} color="var(--electric-violet)" />}
-                  </button>
-                ))}
-              </div>
+              <>
+                <div
+                  onClick={() => setIsCurrencyMenuOpen(false)}
+                  style={{ position: 'fixed', inset: 0, zIndex: 40 }}
+                />
+                <div style={{ position: 'absolute', top: '100%', left: 0, marginTop: 6, width: 140, backgroundColor: '#FFFFFF', border: '1px solid var(--border-subtle)', borderRadius: 6, boxShadow: 'var(--shadow-lg)', zIndex: 50, padding: 4 }}>
+                  {currencies.map((curr) => (
+                    <button
+                      key={curr.code}
+                      onClick={() => { setCurrency(curr.code); setIsCurrencyMenuOpen(false); }}
+                      style={{
+                        width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        padding: '7px 10px', borderRadius: 4, fontSize: '0.8rem',
+                        backgroundColor: curr.code === currency ? 'var(--electric-violet-light)' : 'transparent',
+                        color: curr.code === currency ? 'var(--electric-violet)' : 'var(--text-main)',
+                        fontWeight: curr.code === currency ? 700 : 500, cursor: 'pointer'
+                      }}
+                    >
+                      <span>{curr.label}</span>
+                      {curr.code === currency && <CheckCircle size={13} color="var(--electric-violet)" />}
+                    </button>
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </div>

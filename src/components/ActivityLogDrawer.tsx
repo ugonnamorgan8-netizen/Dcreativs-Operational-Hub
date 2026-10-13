@@ -92,11 +92,11 @@ export const ActivityLogDrawer: React.FC<{ isOpen: boolean; onClose: () => void 
                 backgroundColor: 'var(--bg-surface-secondary)'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px 10px' }}>
                 <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-heading)' }}>
                   {log.actorName} ({log.actorRole})
                 </span>
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-subtle)', whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums', marginLeft: 'auto', flexShrink: 0 }}>
                   {log.timestamp}
                 </span>
               </div>

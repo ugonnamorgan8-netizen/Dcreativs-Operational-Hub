@@ -322,27 +322,100 @@ export const SecurityRbacMatrix: React.FC = () => {
                 backgroundColor: '#FFFFFF',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 4
+                gap: 6,
+                minWidth: 0,
+                overflow: 'hidden'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {/* Header row: Actor Name + Role & Timestamp */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '6px 10px',
+                  minWidth: 0
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6, minWidth: 0 }}>
                   <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-heading)' }}>
-                    {log.actorName} ({log.actorRole})
+                    {log.actorName.replace(new RegExp(`\\s*\\(${log.actorRole}\\)$`, 'i'), '')}
                   </span>
-                  <span style={{ fontSize: '0.78rem', color: 'var(--electric-violet)', fontFamily: 'monospace' }}>
-                    {log.action}
+                  <span
+                    style={{
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      color: 'var(--text-muted)',
+                      backgroundColor: 'var(--bg-surface-secondary)',
+                      padding: '1px 6px',
+                      borderRadius: 4,
+                      border: '1px solid var(--border-subtle)',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {log.actorRole}
                   </span>
                 </div>
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-subtle)' }}>
+                <span
+                  style={{
+                    fontSize: '0.72rem',
+                    color: 'var(--text-subtle)',
+                    whiteSpace: 'nowrap',
+                    fontVariantNumeric: 'tabular-nums',
+                    marginLeft: 'auto',
+                    flexShrink: 0
+                  }}
+                >
                   {log.timestamp}
                 </span>
               </div>
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                Resource: <code>{log.resource}</code> · Correlation: <code>{log.correlationId}</code>
+
+              {/* Action event badge */}
+              <div style={{ minWidth: 0 }}>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    fontSize: '0.76rem',
+                    color: 'var(--electric-violet)',
+                    backgroundColor: 'rgba(65, 0, 245, 0.05)',
+                    border: '1px solid rgba(65, 0, 245, 0.12)',
+                    padding: '2px 8px',
+                    borderRadius: 4,
+                    fontFamily: 'monospace',
+                    fontWeight: 600,
+                    wordBreak: 'break-all',
+                    maxWidth: '100%'
+                  }}
+                >
+                  {log.action}
+                </span>
               </div>
+
+              {/* Resource & Correlation ID */}
+              <div
+                style={{
+                  fontSize: '0.76rem',
+                  color: 'var(--text-muted)',
+                  wordBreak: 'break-word',
+                  overflowWrap: 'anywhere'
+                }}
+              >
+                Resource: <code style={{ wordBreak: 'break-all' }}>{log.resource}</code> · Correlation: <code style={{ wordBreak: 'break-all' }}>{log.correlationId}</code>
+              </div>
+
               {log.reason && (
-                <div style={{ fontSize: '0.75rem', color: '#B45309' }}>
+                <div
+                  style={{
+                    fontSize: '0.74rem',
+                    color: '#B45309',
+                    backgroundColor: 'rgba(245, 158, 11, 0.06)',
+                    padding: '4px 8px',
+                    borderRadius: 4,
+                    border: '1px solid rgba(245, 158, 11, 0.18)',
+                    wordBreak: 'break-word'
+                  }}
+                >
                   <strong>Reason:</strong> {log.reason}
                 </div>
               )}

@@ -1,5 +1,5 @@
 // Service Worker for D'Creativs Operations Hub
-const CACHE_NAME = 'dcreativs-shell-v10';
+const CACHE_NAME = 'dcreativs-shell-v11';
 const SHELL_ASSETS = [
   '/',
   '/index.html',
@@ -37,17 +37,18 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Network-first strategy: always fetch freshest assets, fallback to cache when offline
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) return cachedResponse;
-      return fetch(event.request).then((networkResponse) => {
-        // Cache static JS/CSS/Fonts only
+    fetch(event.request)
+      .then((networkResponse) => {
         if (
           networkResponse &&
           networkResponse.status === 200 &&
           (url.pathname.endsWith('.js') ||
            url.pathname.endsWith('.css') ||
            url.pathname.endsWith('.svg') ||
+           url.pathname === '/' ||
+           url.pathname === '/index.html' ||
            url.hostname.includes('fonts.gstatic.com'))
         ) {
           const responseToCache = networkResponse.clone();
@@ -56,12 +57,14 @@ self.addEventListener('fetch', (event) => {
           });
         }
         return networkResponse;
-      }).catch(() => {
-        // Offline fallback for navigation requests
-        if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
-        }
-      });
-    })
+      })
+      .catch(() => {
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) return cachedResponse;
+          if (event.request.mode === 'navigate') {
+            return caches.match('/index.html');
+          }
+        });
+      })
   );
 });

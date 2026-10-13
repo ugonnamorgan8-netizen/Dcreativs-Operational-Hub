@@ -17,9 +17,11 @@ import {
   GraduationCap,
   FileText,
   BookOpen,
-  X
+  X,
+  Coins
 } from 'lucide-react';
 import { useApp, AppView } from '../context/AppContext';
+import { CurrencyCode } from '../types';
 
 export const Sidebar: React.FC = () => {
   const {
@@ -33,7 +35,10 @@ export const Sidebar: React.FC = () => {
     setIsMobileSidebarOpen,
     canAccessView,
     logout,
-    reviews
+    reviews,
+    currency,
+    setCurrency,
+    currencySymbol
   } = useApp();
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -619,6 +624,47 @@ export const Sidebar: React.FC = () => {
             zIndex: 10
           }}
         >
+          {/* Currency Switcher */}
+          <div
+            style={{
+              padding: '8px 16px',
+              backgroundColor: 'rgba(0, 4, 34, 0.5)',
+              borderBottom: '1px solid var(--border-dark)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexShrink: 0
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.78rem', color: '#CBD5E1' }}>
+              <Coins size={14} color="#A78BFA" />
+              <span>Currency ({currencySymbol})</span>
+            </div>
+            <div style={{ display: 'flex', gap: 4 }}>
+              {(['USD', 'EUR', 'NGN'] as CurrencyCode[]).map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCurrency(c)}
+                  style={{
+                    padding: '3px 8px',
+                    borderRadius: 4,
+                    fontSize: '0.72rem',
+                    fontWeight: currency === c ? 700 : 500,
+                    backgroundColor: currency === c ? 'var(--electric-violet)' : 'rgba(255, 255, 255, 0.08)',
+                    color: currency === c ? '#FFFFFF' : '#94A3B8',
+                    border: '1px solid',
+                    borderColor: currency === c ? 'var(--electric-violet)' : 'rgba(255, 255, 255, 0.1)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Offline Toggle Simulator */}
           <div
             style={{
