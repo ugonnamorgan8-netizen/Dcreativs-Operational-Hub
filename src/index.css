@@ -732,8 +732,16 @@ button, .btn-primary, .btn-secondary, .btn-danger, .btn-ghost {
   animation: sectionJumpGlow 1.8s ease-out;
 }
 
+.sidebar-currency-mobile-only {
+  display: none !important;
+}
+
 /* Responsive Rules */
 @media (max-width: 1024px) {
+  .sidebar-currency-mobile-only {
+    display: flex !important;
+  }
+
   .mobile-hamburger-btn,
   .md-hidden {
     display: inline-flex !important;
