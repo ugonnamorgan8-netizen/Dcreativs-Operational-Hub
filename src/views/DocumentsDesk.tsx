@@ -683,50 +683,46 @@ export const DocumentsDesk: React.FC = () => {
                   gap: 12
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                      <span
-                        style={{
-                          fontSize: '0.68rem',
-                          fontWeight: 700,
-                          padding: '2px 6px',
-                          borderRadius: 4,
-                          backgroundColor: 'var(--electric-violet-light)',
-                          color: 'var(--electric-violet)'
-                        }}
-                      >
-                        {doc.format}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: '0.68rem',
-                          fontWeight: 700,
-                          padding: '2px 6px',
-                          borderRadius: 4,
-                          backgroundColor: '#F1F5F9',
-                          color: '#475569'
-                        }}
-                      >
-                        {doc.category}
-                      </span>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{doc.fileSize}</span>
-                    </div>
-
-                    <h3 style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--text-heading)', margin: '6px 0 2px' }}>
-                      {doc.title}
-                    </h3>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      File: {doc.fileName} · Version: {doc.version}
-                    </div>
+                {/* Top Row: Meta Tags on Left & Status Badge Aligned to Top-Right */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    <span
+                      style={{
+                        fontSize: '0.68rem',
+                        fontWeight: 700,
+                        padding: '2px 6px',
+                        borderRadius: 4,
+                        backgroundColor: 'var(--electric-violet-light)',
+                        color: 'var(--electric-violet)'
+                      }}
+                    >
+                      {doc.format}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: '0.68rem',
+                        fontWeight: 700,
+                        padding: '2px 6px',
+                        borderRadius: 4,
+                        backgroundColor: '#F1F5F9',
+                        color: '#475569'
+                      }}
+                    >
+                      {doc.category}
+                    </span>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{doc.fileSize}</span>
                   </div>
 
                   <span
                     style={{
-                      fontSize: '0.7rem',
+                      fontSize: '0.68rem',
                       fontWeight: 700,
-                      padding: '3px 8px',
+                      padding: '3px 9px',
                       borderRadius: 9999,
+                      letterSpacing: '0.02em',
+                      whiteSpace: 'nowrap',
+                      marginLeft: 'auto',
+                      flexShrink: 0,
                       backgroundColor:
                         doc.status === 'APPROVED'
                           ? '#D1FAE5'
@@ -738,11 +734,27 @@ export const DocumentsDesk: React.FC = () => {
                           ? '#065F46'
                           : doc.status === 'PENDING_REVIEW' || doc.status === 'EXTRACTED'
                           ? '#92400E'
-                          : '#475569'
+                          : '#475569',
+                      border:
+                        doc.status === 'APPROVED'
+                          ? '1px solid #A7F3D0'
+                          : doc.status === 'PENDING_REVIEW' || doc.status === 'EXTRACTED'
+                          ? '1px solid #FDE68A'
+                          : '1px solid #E2E8F0'
                     }}
                   >
-                    {doc.status}
+                    {doc.status.replace(/_/g, ' ')}
                   </span>
+                </div>
+
+                {/* Document Title & File Version Info */}
+                <div>
+                  <h3 style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--text-heading)', margin: '0 0 4px', lineHeight: 1.35 }}>
+                    {doc.title}
+                  </h3>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    File: {doc.fileName} · Version: {doc.version}
+                  </div>
                 </div>
 
                 <div
