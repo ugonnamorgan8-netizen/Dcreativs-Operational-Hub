@@ -159,6 +159,8 @@ export const OpenLineReports: React.FC = () => {
                         fontWeight: 700,
                         padding: '3px 8px',
                         borderRadius: 4,
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
                         backgroundColor:
                           report.status === 'RESOLVED'
                             ? '#DCFCE7'
