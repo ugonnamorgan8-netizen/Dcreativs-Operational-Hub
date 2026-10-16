@@ -28,51 +28,49 @@ export const NewCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void }
 
   return (
     <div
+      className="modal-backdrop"
       style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(0, 4, 34, 0.75)',
-        backdropFilter: 'blur(6px)',
-        zIndex: 120,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 24
+        padding: '16px'
       }}
       onClick={onClose}
     >
       <div
+        className="modal-content"
         style={{
           width: '100%',
           maxWidth: 460,
           backgroundColor: '#FFFFFF',
           borderRadius: 'var(--radius-lg)',
           boxShadow: 'var(--shadow-lg)',
+          maxHeight: '92vh',
+          display: 'flex',
+          flexDirection: 'column',
           overflow: 'hidden'
         }}
         onClick={(e) => e.stopPropagation()}
       >
         <div
           style={{
-            padding: '20px 24px',
+            padding: '18px 20px',
             borderBottom: '1px solid var(--border-subtle)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            flexShrink: 0
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <CalendarIcon size={20} color="var(--electric-violet)" />
-            <h3 style={{ fontSize: '1.2rem', color: 'var(--text-heading)', fontWeight: 700 }}>
+            <h3 style={{ fontSize: '1.15rem', color: 'var(--text-heading)', fontWeight: 700 }}>
               Schedule Campaign (June 2026)
             </h3>
           </div>
-          <button onClick={onClose} style={{ color: 'var(--text-muted)' }}>
+          <button onClick={onClose} style={{ color: 'var(--text-muted)', padding: 4 }}>
             <X size={20} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <form onSubmit={handleSubmit} style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto' }}>
           <div>
             <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-heading)', display: 'block', marginBottom: 6 }}>
               Campaign Title
@@ -87,7 +85,7 @@ export const NewCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void }
                 padding: '10px 12px',
                 borderRadius: 6,
                 border: '1px solid var(--border-subtle)',
-                fontSize: '0.88rem'
+                fontSize: '0.92rem'
               }}
               required
             />
@@ -108,7 +106,7 @@ export const NewCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void }
                 padding: '10px 12px',
                 borderRadius: 6,
                 border: '1px solid var(--border-subtle)',
-                fontSize: '0.88rem'
+                fontSize: '0.92rem'
               }}
               required
             />
@@ -118,7 +116,7 @@ export const NewCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void }
             <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-heading)', display: 'block', marginBottom: 6 }}>
               Badge Color Tag
             </label>
-            <div style={{ display: 'flex', gap: 12 }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               {['#4100F5', '#885FFF', '#10B981', '#F59E0B', '#EF4444'].map((c) => (
                 <div
                   key={c}
@@ -136,11 +134,11 @@ export const NewCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void }
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 10 }}>
-            <button type="button" onClick={onClose} className="btn-secondary">
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 10, flexWrap: 'wrap' }}>
+            <button type="button" onClick={onClose} className="btn-secondary" style={{ flex: '1 1 100px' }}>
               Cancel
             </button>
-            <button type="submit" className="btn-primary">
+            <button type="submit" className="btn-primary" style={{ flex: '1 1 140px' }}>
               <Sparkles size={16} />
               <span>Add to Calendar</span>
             </button>
